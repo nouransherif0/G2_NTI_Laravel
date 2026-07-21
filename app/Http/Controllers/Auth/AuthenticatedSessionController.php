@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use OpenApi\Attributes as OA;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -19,25 +20,45 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
+    #[OA\Post(
+        path: '/login',
+        summary: 'Login user',
+        description: 'Authenticate a user and create a session.',
+        tags: ['Authentication'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['email', 'password'],
+                properties: [
+                    new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+                    new OA\Property(property: 'password', type: 'string', format: 'password', example: 'password123')
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 204, description: 'Successfully authenticated (or 302 Redirect)'),
+            new OA\Response(response: 422, description: 'Validation error / Invalid credentials')
+        ]
+    )]
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        if ($request->user()->role === 'admin') {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        }
-
-        return redirect()->intended(route('home', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
+    #[OA\Post(
+        path: '/logout',
+        summary: 'Logout user',
+        description: 'Destroy the authenticated session.',
+        tags: ['Authentication'],
+        security: [['bearerAuth' => []]],
+        responses: [
+            new OA\Response(response: 204, description: 'Successfully logged out (or 302 Redirect)')
+        ]
+    )]
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

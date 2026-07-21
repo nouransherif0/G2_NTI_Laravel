@@ -12,6 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->validateCsrfTokens(except: [
+            'login',
+            'register',
+            'logout',
+            'forgot-password',
+            'reset-password',
+            'password',
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);

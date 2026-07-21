@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use OpenApi\Attributes as OA;
 
 class NewPasswordController extends Controller
 {
@@ -24,11 +25,28 @@ class NewPasswordController extends Controller
         return view('auth.reset-password', ['request' => $request]);
     }
 
-    /**
-     * Handle an incoming new password request.
-     *
-     * @throws ValidationException
-     */
+    #[OA\Post(
+        path: '/reset-password',
+        summary: 'Reset password',
+        description: 'Reset the user password using a token.',
+        tags: ['Authentication'],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['token', 'email', 'password', 'password_confirmation'],
+                properties: [
+                    new OA\Property(property: 'token', type: 'string'),
+                    new OA\Property(property: 'email', type: 'string', format: 'email', example: 'user@example.com'),
+                    new OA\Property(property: 'password', type: 'string', format: 'password', example: 'newpassword123'),
+                    new OA\Property(property: 'password_confirmation', type: 'string', format: 'password', example: 'newpassword123')
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: 'Password has been successfully reset (or 302 Redirect)'),
+            new OA\Response(response: 422, description: 'Validation error / Invalid token')
+        ]
+    )]
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
