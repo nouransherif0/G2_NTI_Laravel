@@ -12,6 +12,10 @@ use App\Http\Controllers\Api\V1\Subcategories\SubcategoryController;
 use App\Http\Controllers\Api\V1\Admin\SubcategoryController as AdminSubcategoryController;
 use App\Http\Controllers\Api\V1\Products\ProductController;
 use App\Http\Controllers\Api\V1\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Api\V1\AddOns\AddOnController;
+use App\Http\Controllers\Api\V1\Admin\AddOnController as AdminAddOnController;
+use App\Http\Controllers\Api\V1\DeliveryZones\DeliveryZoneController;
+use App\Http\Controllers\Api\V1\Admin\DeliveryZoneController as AdminDeliveryZoneController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,6 +39,9 @@ Route::middleware('throttle:api')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/categories/{id}', [CategoryController::class, 'show']);
     Route::get('/subcategories', [SubcategoryController::class, 'index']);
+
+    Route::get('/add-ons', [AddOnController::class, 'index']);
+    Route::get('/delivery-zones', [DeliveryZoneController::class, 'index']);
 
     // Protected User Routes (Require Authentication)
     Route::middleware('auth')->group(function () {
@@ -61,6 +68,8 @@ Route::middleware('throttle:api')->group(function () {
         Route::apiResource('products', AdminProductController::class);
         Route::apiResource('categories', AdminCategoryController::class);
         Route::apiResource('subcategories', AdminSubcategoryController::class);
+        Route::apiResource('add-ons', AdminAddOnController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::apiResource('delivery-zones', AdminDeliveryZoneController::class)->only(['index', 'store', 'update', 'destroy']);
     });
 });
 
