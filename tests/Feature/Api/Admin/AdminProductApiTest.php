@@ -16,7 +16,7 @@ class AdminProductApiTest extends TestCase
 
     public function test_admin_can_create_a_product()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $subcategory = Subcategory::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/admin/products', [
@@ -35,7 +35,7 @@ class AdminProductApiTest extends TestCase
 
     public function test_admin_can_update_a_product()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $product = Product::factory()->create(['name' => 'Old Product']);
 
         $response = $this->actingAs($user)->putJson("/admin/products/{$product->id}", [
@@ -54,7 +54,7 @@ class AdminProductApiTest extends TestCase
 
     public function test_admin_can_delete_a_product()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $product = Product::factory()->create();
 
         $response = $this->actingAs($user)->deleteJson("/admin/products/{$product->id}");

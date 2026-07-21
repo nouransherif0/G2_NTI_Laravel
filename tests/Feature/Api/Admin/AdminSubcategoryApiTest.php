@@ -14,7 +14,7 @@ class AdminSubcategoryApiTest extends TestCase
 
     public function test_admin_can_create_a_subcategory()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $category = Category::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/admin/subcategories', [
@@ -30,7 +30,7 @@ class AdminSubcategoryApiTest extends TestCase
 
     public function test_admin_can_update_a_subcategory()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $subcategory = Subcategory::factory()->create();
         $newCategory = Category::factory()->create();
 
@@ -47,7 +47,7 @@ class AdminSubcategoryApiTest extends TestCase
 
     public function test_admin_can_delete_a_subcategory()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $subcategory = Subcategory::factory()->create();
 
         $response = $this->actingAs($user)->deleteJson("/admin/subcategories/{$subcategory->id}");

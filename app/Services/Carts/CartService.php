@@ -37,16 +37,22 @@ class CartService
         ]);
     }
 
-    public function updateItemQuantity(string $itemId, int $quantity)
+    public function updateItemQuantity(string $itemId, int $quantity, string $userId)
     {
-        $item = CartItem::findOrFail($itemId);
+        $item = CartItem::whereHas('cart', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->findOrFail($itemId);
+        
         $item->update(['quantity' => $quantity]);
         return $item;
     }
 
-    public function removeItem(string $itemId)
+    public function removeItem(string $itemId, string $userId)
     {
-        $item = CartItem::findOrFail($itemId);
+        $item = CartItem::whereHas('cart', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->findOrFail($itemId);
+        
         $item->delete();
     }
 

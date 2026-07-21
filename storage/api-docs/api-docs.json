@@ -12,6 +12,21 @@
         }
     ],
     "paths": {
+        "/add-ons": {
+            "get": {
+                "tags": [
+                    "AddOns"
+                ],
+                "summary": "Get all add-ons",
+                "description": "Retrieve a list of all available add-ons.",
+                "operationId": "47c7bfcf3de8d2e419b09e2317b06307",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
         "/addresses": {
             "get": {
                 "tags": [
@@ -179,6 +194,162 @@
                 ]
             }
         },
+        "/admin/add-ons": {
+            "get": {
+                "tags": [
+                    "Admin AddOns"
+                ],
+                "summary": "Get all add-ons (Admin)",
+                "description": "Retrieve a list of all add-ons for the admin panel.",
+                "operationId": "fd3083ea3aec4c1e9648382759578aa7",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin AddOns"
+                ],
+                "summary": "Create a new add-on",
+                "description": "Create a new add-on (Admin only).",
+                "operationId": "8de3b6273dd1d8fa24b221c691325c03",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "price_adjustment"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Extra Cheese"
+                                    },
+                                    "price_adjustment": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Add-on created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/add-ons/{id}": {
+            "put": {
+                "tags": [
+                    "Admin AddOns"
+                ],
+                "summary": "Update an existing add-on",
+                "description": "Update the details of an add-on (Admin only).",
+                "operationId": "b1969f1788da1ddc3f579f5e0dcd4929",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Add-on ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Extra Cheese"
+                                    },
+                                    "price_adjustment": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Add-on updated successfully"
+                    },
+                    "404": {
+                        "description": "Add-on not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin AddOns"
+                ],
+                "summary": "Delete an add-on",
+                "description": "Delete an add-on (Admin only).",
+                "operationId": "2ff52dbd37eb1f785e300026c203344b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Add-on ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Add-on deleted successfully"
+                    },
+                    "404": {
+                        "description": "Add-on not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/admin/categories": {
             "get": {
                 "tags": [
@@ -315,6 +486,181 @@
                 "responses": {
                     "200": {
                         "description": "Category deleted successfully"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/delivery-zones": {
+            "get": {
+                "tags": [
+                    "Admin DeliveryZones"
+                ],
+                "summary": "Get all delivery zones (Admin)",
+                "description": "Retrieve a list of all delivery zones for the admin panel.",
+                "operationId": "9ca00162c3429bff4a212d115caff4fd",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admin DeliveryZones"
+                ],
+                "summary": "Create a new delivery zone",
+                "description": "Create a new delivery zone (Admin only).",
+                "operationId": "2c2689671ba4f493942cd7b1cc80dc51",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "delivery_fee",
+                                    "minimum_order_value"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Downtown"
+                                    },
+                                    "delivery_fee": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5
+                                    },
+                                    "minimum_order_value": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 15
+                                    },
+                                    "estimated_time": {
+                                        "type": "string",
+                                        "example": "30-45 mins"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Delivery zone created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/delivery-zones/{id}": {
+            "put": {
+                "tags": [
+                    "Admin DeliveryZones"
+                ],
+                "summary": "Update an existing delivery zone",
+                "description": "Update the details of a delivery zone (Admin only).",
+                "operationId": "6e30bb8a402dad58a4a9393a82d5743c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Delivery Zone ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Downtown"
+                                    },
+                                    "delivery_fee": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5.5
+                                    },
+                                    "minimum_order_value": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 20
+                                    },
+                                    "estimated_time": {
+                                        "type": "string",
+                                        "example": "40-50 mins"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Delivery zone updated successfully"
+                    },
+                    "404": {
+                        "description": "Delivery zone not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admin DeliveryZones"
+                ],
+                "summary": "Delete a delivery zone",
+                "description": "Delete a delivery zone (Admin only).",
+                "operationId": "c5c21e8a5e9cbca282d1e3b542ae010a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Delivery Zone ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delivery zone deleted successfully"
+                    },
+                    "404": {
+                        "description": "Delivery zone not found"
                     }
                 },
                 "security": [
@@ -878,6 +1224,21 @@
                 }
             }
         },
+        "/delivery-zones": {
+            "get": {
+                "tags": [
+                    "DeliveryZones"
+                ],
+                "summary": "Get all delivery zones",
+                "description": "Retrieve a list of all available delivery zones.",
+                "operationId": "2df02055d1cdf4c8bdbbf2f82acccd1f",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
         "/orders": {
             "get": {
                 "tags": [
@@ -1342,12 +1703,24 @@
     },
     "tags": [
         {
+            "name": "AddOns",
+            "description": "AddOns"
+        },
+        {
             "name": "Addresses",
             "description": "Addresses"
         },
         {
+            "name": "Admin AddOns",
+            "description": "Admin AddOns"
+        },
+        {
             "name": "Admin - Categories",
             "description": "Admin - Categories"
+        },
+        {
+            "name": "Admin DeliveryZones",
+            "description": "Admin DeliveryZones"
         },
         {
             "name": "Admin - Orders",
@@ -1368,6 +1741,10 @@
         {
             "name": "Categories",
             "description": "Categories"
+        },
+        {
+            "name": "DeliveryZones",
+            "description": "DeliveryZones"
         },
         {
             "name": "Orders",

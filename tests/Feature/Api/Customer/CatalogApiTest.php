@@ -50,7 +50,7 @@ class CatalogApiTest extends TestCase
         $response = $this->getJson('/products');
 
         $response->assertStatus(200)
-                 ->assertJsonCount(4);
+                 ->assertJsonCount(4, 'data');
     }
 
     public function test_can_get_product_by_id()
@@ -60,6 +60,6 @@ class CatalogApiTest extends TestCase
         $response = $this->getJson("/products/{$product->id}");
 
         $response->assertStatus(200)
-                 ->assertJsonPath('id', $product->id);
+                 ->assertJsonPath('data.id', $product->id);
     }
 }

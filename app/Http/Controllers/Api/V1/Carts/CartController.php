@@ -97,7 +97,7 @@ class CartController extends Controller
     )]
     public function update(UpdateCartItemRequest $request, $itemId)
     {
-        $item = $this->cartService->updateItemQuantity($itemId, $request->quantity);
+        $item = $this->cartService->updateItemQuantity($itemId, $request->quantity, $request->user()->id);
         return response()->json([
             'message' => 'Cart item updated successfully',
             'item' => new CartItemResource($item->load('product'))
@@ -123,9 +123,9 @@ class CartController extends Controller
             new OA\Response(response: 200, description: 'Item removed successfully')
         ]
     )]
-    public function remove($itemId)
+    public function remove(Request $request, $itemId)
     {
-        $this->cartService->removeItem($itemId);
+        $this->cartService->removeItem($itemId, $request->user()->id);
         return response()->json(['message' => 'Item removed from cart successfully']);
     }
 }

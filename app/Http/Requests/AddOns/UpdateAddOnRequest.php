@@ -18,7 +18,7 @@ class UpdateAddOnRequest extends FormRequest
     'price_adjustment' => 'sometimes|required|numeric|min:0',
    ];
     }
-  public function message(): array{
+  public function messages(): array{
     return[
       'name.max' => 'The name can not be longer than 100 characters!',
       'name.string' => 'The name must be a string!',

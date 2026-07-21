@@ -23,8 +23,8 @@ class AddOn extends Model
         return $this->belongsToMany(Product::class, 'product_addon');
     }
 
-    public function order_item_addon():hasmany{
-        return $this->hasmany(Orders::class, 'order item addons');
-
+    public function orderItemAddons(): HasMany
+    {
+        return $this->hasMany(OrderItemAddon::class);
     }
 }

@@ -15,7 +15,7 @@ class CategoryService
         return Category::with('subcategories')->findOrFail($id);
     }
 
-    public function getCategoryWithProducts($id)
+    public function getCategoryWithProducts(int $id)
     {
         return Category::findOrFail($id)->products;
     }

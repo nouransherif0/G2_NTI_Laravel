@@ -61,7 +61,7 @@ Route::middleware('throttle:api')->group(function () {
     });
 
     // Admin Routes
-    Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/orders', [AdminOrderController::class, 'index']);
         Route::put('/orders/{id}/status', [AdminOrderController::class, 'update']);
 

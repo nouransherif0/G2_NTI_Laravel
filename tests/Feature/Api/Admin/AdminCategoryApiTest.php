@@ -13,7 +13,7 @@ class AdminCategoryApiTest extends TestCase
 
     public function test_admin_can_get_all_categories()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         Category::factory()->count(3)->create();
 
         $response = $this->actingAs($user)->getJson('/admin/categories');
@@ -24,7 +24,7 @@ class AdminCategoryApiTest extends TestCase
 
     public function test_admin_can_create_a_category()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($user)->postJson('/admin/categories', [
             'name' => 'New Category',
@@ -38,7 +38,7 @@ class AdminCategoryApiTest extends TestCase
 
     public function test_admin_can_update_a_category()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $category = Category::factory()->create(['name' => 'Old Name']);
 
         $response = $this->actingAs($user)->putJson("/admin/categories/{$category->id}", [
@@ -53,7 +53,7 @@ class AdminCategoryApiTest extends TestCase
 
     public function test_admin_can_delete_a_category()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $category = Category::factory()->create();
 
         $response = $this->actingAs($user)->deleteJson("/admin/categories/{$category->id}");

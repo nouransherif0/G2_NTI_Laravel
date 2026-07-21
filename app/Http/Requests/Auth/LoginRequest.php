@@ -83,4 +83,30 @@ class LoginRequest extends FormRequest
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'Email is required.',
+            'email.string' => 'Email must be a string.',
+            'email.numeric' => 'Email must be a number.',
+            'email.integer' => 'Email must be an integer.',
+            'email.exists' => 'The selected Email is invalid.',
+            'email.boolean' => 'Email must be true or false.',
+            'email.array' => 'Email must be an array.',
+            'email.email' => 'Email must be a valid email address.',
+            'email.max' => 'Email exceeds the maximum allowed length.',
+            'email.min' => 'Email is below the minimum allowed length.',
+            'password.required' => 'Password is required.',
+            'password.string' => 'Password must be a string.',
+            'password.numeric' => 'Password must be a number.',
+            'password.integer' => 'Password must be an integer.',
+            'password.exists' => 'The selected Password is invalid.',
+            'password.boolean' => 'Password must be true or false.',
+            'password.array' => 'Password must be an array.',
+            'password.email' => 'Password must be a valid email address.',
+            'password.max' => 'Password exceeds the maximum allowed length.',
+            'password.min' => 'Password is below the minimum allowed length.',
+        ];
+    }
 }

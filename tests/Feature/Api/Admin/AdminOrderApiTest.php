@@ -13,7 +13,7 @@ class AdminOrderApiTest extends TestCase
 
     public function test_admin_can_get_all_orders()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         Order::factory()->count(5)->create();
 
         $response = $this->actingAs($user)->getJson('/admin/orders');
@@ -24,7 +24,7 @@ class AdminOrderApiTest extends TestCase
 
     public function test_admin_can_update_order_status()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $order = Order::factory()->create(['status' => 'pending']);
 
         $response = $this->actingAs($user)->putJson("/admin/orders/{$order->id}/status", [
@@ -42,7 +42,7 @@ class AdminOrderApiTest extends TestCase
 
     public function test_admin_cannot_update_invalid_status()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
         $order = Order::factory()->create(['status' => 'pending']);
 
         $response = $this->actingAs($user)->putJson("/admin/orders/{$order->id}/status", [
