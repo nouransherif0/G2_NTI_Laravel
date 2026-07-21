@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\hasmany;
+
 
 class AddOn extends Model
 {
@@ -16,8 +18,13 @@ class AddOn extends Model
     ];
 
     //rs add-on to many products 
-    public function products(): BelongsToMany
+    public function products_item_addon(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_addon', 'addon_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'product_addon');
+    }
+
+    public function order_item_addon():hasmany{
+        return $this->hasmany(Orders::class, 'order item addons');
+
     }
 }

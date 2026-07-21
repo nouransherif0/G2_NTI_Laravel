@@ -28,7 +28,6 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-    // add-ons chosen for this order item 
     public function orderItemAddons(): HasMany
     {
         return $this->hasMany(OrderItemAddon::class);

@@ -17,7 +17,7 @@ class DeliveryZone extends Model
         'estimated_time',
     ];
 
-    //rs delivery to many saved addresses saved
+    //rs delivery to many saved addresses 
     public function addresses(): HasMany
     {
         return $this->hasMany(Address::class);

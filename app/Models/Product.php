@@ -22,7 +22,7 @@ class Product extends Model
         'is_featured',
     ];
 
-    // rs one product to one category 
+    // rs one product to one subcategory 
     public function subcategory(): BelongsTo
     {
         return $this->belongsTo(Subcategory::class);
@@ -44,5 +44,9 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function casts(): array{
+        return['is_featured'=>'boolean'];
     }
 }
