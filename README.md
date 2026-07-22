@@ -1,58 +1,200 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ☕ Sip & Snug - Coffee House & Cafe E-Commerce System
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/front/photos/coffee/coffee%20cate.jpg" width="100%" style="border-radius: 15px;" alt="Sip & Snug Banner">
 </p>
 
-## About Laravel
+[![Laravel](https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql)](https://mysql.com)
+[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-7952B3?style=for-the-badge&logo=bootstrap)](https://getbootstrap.com)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI%203.0-85EA2D?style=for-the-badge&logo=swagger)](https://swagger.io)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+An end-to-end e-commerce system and RESTful API backend for **Sip & Snug Cafe**. Built with **Laravel 11**, this project powers both mobile and web clients through secure API endpoints, alongside a dynamic customer-facing frontend (Blade + AJAX) and a comprehensive Admin Management Dashboard.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📑 Table of Contents
+1. [🚀 Tech Stack](#-tech-stack)
+2. [✨ Key Features](#-key-features)
+   - [👤 Customer Features](#-customer-features)
+   - [🛡️ Admin Dashboard](#️-admin-dashboard)
+3. [🗄️ Database Architecture](#️-database-architecture)
+4. [🔌 API & Swagger Documentation](#-api--swagger-documentation)
+5. [🛠️ Installation & Setup Guide](#️-installation--setup-guide)
+6. [🧪 Running Tests](#-running-tests)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 Tech Stack
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### **Backend Framework & Core**
+* **PHP 8.3** & **Laravel 11.x**
+* **Laravel Sanctum**: API token management and stateful session authentication.
+* **MySQL 8.0**: Relational database storage with Eloquent ORM relationships.
+* **L5-Swagger (OpenAPI 3.0)**: Interactive API documentation and specification generator.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### **Frontend & UI**
+* **Blade Templating Engine**: Server-rendered layouts for customer storefront and admin panel.
+* **Bootstrap 5.3 & Vanilla CSS**: Modern, responsive styling.
+* **JavaScript (jQuery & Fetch API / AJAX)**: Asynchronous shopping cart interactions, live popups, and real-time updates without page reloads.
+* **AOS, Swiper.js, Magnific Popup, FontAwesome 6**: Rich visuals, animations, and sliders.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## ✨ Key Features
 
-```bash
-composer require laravel/boost --dev
+### 👤 Customer Features
+* **Interactive Menu & Categories:** Browse categories (Coffee, Fresh Juices, Refreshers, Smoothies, Matcha) and subcategories with instant filtering.
+* **Product Customization Modal:**
+  * Adjust quantity dynamically.
+  * Select custom drink add-ons and toppings.
+  * View preparation time, calories, ratings, and descriptions.
+* **Dynamic Shopping Cart:**
+  * Add, update, and remove items seamlessly via AJAX.
+  * Real-time subtotal computation and badge counter updates.
+* **Checkout & Delivery Management:**
+  * Select delivery zones with calculated delivery fees.
+  * Manage saved delivery addresses.
+* **Order History & Live Tracking:** Review past orders and track order statuses in real time.
+* **Favorites System (Wishlist):** Save favorite drinks and items with a single click.
+* **Additional Engagement Services:** Table reservations, contact form submissions, and live support chat.
 
-php artisan boost:install
+---
+
+### 🛡️ Admin Dashboard
+* **Analytics Overview:** Monitor overall sales metrics, active orders, customer counts, and key performance metrics.
+* **Products & Categories Management (CRUD):**
+  * Create, update, and delete products, pricing, calories, prep time, and product images.
+  * Manage categories, subcategories, and drink add-ons.
+* **Order Fulfillment System:**
+  * View all customer orders and full item breakdowns with add-ons.
+  * Update order statuses (`pending`, `preparing`, `out_for_delivery`, `delivered`, `canceled`).
+* **Delivery Zone Management:** Define supported zones and configure zone-specific delivery fees.
+
+---
+
+## 🗄️ Database Architecture
+
+The system database schema uses structured Eloquent relationships:
+
+| Table | Description |
+| :--- | :--- |
+| `users` | User accounts, roles (`admin` or `customer`), profile metadata, and images. |
+| `categories` | Top-level product categories (e.g., Coffee, Smoothies). |
+| `subcategories` | Sub-groupings linked to parent categories. |
+| `products` | Product catalog details (name, price, calories, prep time, image, ratings). |
+| `add_ons` & `product_addons` | Drink customizations, extra toppings, and product mappings. |
+| `carts` & `cart_items` | Persistent user shopping carts, selected add-ons, and item quantities. |
+| `orders`, `order_items`, `order_item_addons` | Order history, line-item pricing, selected add-ons, and delivery status. |
+| `addresses` | Saved customer delivery addresses. |
+| `delivery_zones` | Supported delivery geographic zones and associated shipping rates. |
+| `favorites` | Customer saved product wishlist items. |
+| `contact_messages`, `reservations`, `subscribers` | Contact inquiries, table reservations, and newsletter subscribers. |
+
+---
+
+## 🔌 API & Swagger Documentation
+
+The project includes built-in interactive **Swagger / OpenAPI** documentation to easily explore and test API endpoints.
+
+📍 **Swagger API Documentation URL:**
+```http
+http://127.0.0.1:8000/api/documentation
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Key API Endpoints Overview:
 
-## Contributing
+#### 🔓 **Public API Endpoints**
+* `GET /api/v1/products` - Retrieve list of products.
+* `GET /api/v1/products/{id}` - Get single product details.
+* `GET /api/v1/categories` - Get main product categories.
+* `GET /api/v1/subcategories` - Get subcategories.
+* `GET /api/v1/add-ons` - List available add-ons.
+* `GET /api/v1/delivery-zones` - List active delivery zones and fees.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 🔒 **Protected Customer API Endpoints (Requires Auth)**
+* `GET /api/v1/cart` - View authenticated user's cart.
+* `POST /api/v1/cart/items` - Add item to cart.
+* `PUT /api/v1/cart/items/{id}` - Update cart item quantity.
+* `DELETE /api/v1/cart/items/{id}` - Remove item from cart.
+* `GET /api/v1/orders` - View customer order history.
+* `POST /api/v1/orders` - Place a new order (Checkout).
+* `GET /api/v1/addresses` - Manage delivery addresses (CRUD).
 
-## Code of Conduct
+#### 🛡️ **Admin API Endpoints (Requires Admin Role)**
+* `GET /api/v1/admin/orders` - List all store orders.
+* `PUT /api/v1/admin/orders/{id}/status` - Update order fulfillment status.
+* `POST / PUT / DELETE /api/v1/admin/products` - Full product management.
+* `POST / PUT / DELETE /api/v1/admin/categories` - Full category management.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠️ Installation & Setup Guide
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Follow these steps to run the application locally:
 
-## License
+### 1. Prerequisites
+* PHP >= 8.3
+* Composer
+* MySQL Database Server
+* Node.js & NPM (optional for assets)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Step-by-Step Setup
+
+```bash
+# 1. Clone the Repository
+git clone https://github.com/nouransherif0/G2_NTI_Laravel.git
+cd G2_NTI_Laravel
+
+# 2. Install PHP Dependencies
+composer install
+
+# 3. Create Environment File
+cp .env.example .env
+
+# 4. Generate Application Key
+php artisan key:generate
+
+# 5. Configure Database in .env
+# Edit your database credentials:
+# DB_DATABASE=NTI
+# DB_USERNAME=root
+# DB_PASSWORD=your_password
+# SANCTUM_STATEFUL_DOMAINS=127.0.0.1:8000,127.0.0.1:8001,localhost:8000,localhost:8001,localhost,127.0.0.1
+
+# 6. Run Migrations & Seeders
+php artisan migrate --seed
+
+# 7. Create Storage Symbolic Link
+php artisan storage:link
+
+# 8. Generate Swagger API Documentation
+php artisan l5-swagger:generate
+
+# 9. Start Local Development Server
+php artisan serve
+```
+
+Access the application at `http://127.0.0.1:8000`  
+Access Swagger API Docs at `http://127.0.0.1:8000/api/documentation`
+
+---
+
+## 🧪 Running Tests
+
+The application includes unit and feature test suites powered by PHPUnit to verify API endpoints, authentication, cart functionality, and order processing:
+
+```bash
+# Run all test suites
+php artisan test
+
+# Run cart API feature tests specifically
+php artisan test --filter=CartApiTest
+```
+
+---
+
+<p align="center">
+  Crafted with ❤️ for <b>Sip & Snug Coffee House</b>
+</p>
