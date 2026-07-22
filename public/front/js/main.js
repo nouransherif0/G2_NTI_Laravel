@@ -496,3 +496,375 @@ window.addEventListener('scroll', function() {
         });
     }
 });
+/* ============================================================
+   SIDE MENU DRAWER LOGIC
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const sideMenuDrawer = document.getElementById("sideMenuDrawer");
+    const sideMenuOverlay = document.getElementById("sideMenuOverlay");
+    const sideMenuClose = document.getElementById("sideMenuClose");
+
+    if (hamburgerBtn && sideMenuDrawer && sideMenuOverlay && sideMenuClose) {
+        function openDrawer() {
+            sideMenuDrawer.classList.add("active");
+            sideMenuOverlay.classList.add("active");
+            document.body.style.overflow = "hidden"; // Prevent background scrolling
+        }
+
+        function closeDrawer() {
+            sideMenuDrawer.classList.remove("active");
+            sideMenuOverlay.classList.remove("active");
+            document.body.style.overflow = ""; // Restore scrolling
+        }
+
+        hamburgerBtn.addEventListener("click", openDrawer);
+        sideMenuClose.addEventListener("click", closeDrawer);
+        sideMenuOverlay.addEventListener("click", closeDrawer);
+    }
+
+    // Accordion Logic for Side Menu
+    const accordionBtns = document.querySelectorAll(".sm-accordion-btn");
+    accordionBtns.forEach(btn => {
+        btn.addEventListener("click", function() {
+            const item = this.closest(".sm-accordion-item");
+            // Optional: Close others
+            // document.querySelectorAll('.sm-accordion-item').forEach(other => {
+            //     if(other !== item) other.classList.remove('active');
+            // });
+            item.classList.toggle("active");
+        });
+    });
+});
+
+/* ============================================================
+   CUSTOM MODALS LOGIC
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    const modalTriggers = document.querySelectorAll('[data-cm-target]');
+    const modalCloses = document.querySelectorAll('[data-cm-close]');
+    const modals = document.querySelectorAll('.cm-overlay');
+
+    modalTriggers.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = btn.getAttribute('data-cm-target');
+            const modal = document.getElementById(targetId);
+            if (modal) {
+                modal.classList.add('open');
+                document.body.style.overflow = "hidden"; // Prevent background scrolling
+            }
+        });
+    });
+
+    modalCloses.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const modal = btn.closest('.cm-overlay');
+            if (modal) {
+                modal.classList.remove('open');
+                // Only restore scrolling if side menu is also closed
+                const sideMenuOverlay = document.getElementById("sideMenuOverlay");
+                if (!sideMenuOverlay || !sideMenuOverlay.classList.contains("active")) {
+                    document.body.style.overflow = "";
+                }
+            }
+        });
+    });
+
+    modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('open');
+                const sideMenuOverlay = document.getElementById("sideMenuOverlay");
+                if (!sideMenuOverlay || !sideMenuOverlay.classList.contains("active")) {
+                    document.body.style.overflow = "";
+                }
+            }
+        });
+    });
+});
+
+/* ============================================================
+   FAQ MODAL LOGIC
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll(".faq-q");
+    faqQuestions.forEach(btn => {
+        btn.addEventListener("click", function() {
+            const item = this.parentElement;
+            
+            // Close others if desired
+            // document.querySelectorAll('.faq-item').forEach(other => {
+            //    if(other !== item) other.classList.remove('active');
+            // });
+
+            item.classList.toggle("active");
+        });
+    });
+
+    // FAQ Search Logic
+    const faqSearchInput = document.getElementById("faqSearchInput");
+    const faqItems = document.querySelectorAll(".faq-item");
+
+    if (faqSearchInput) {
+        faqSearchInput.addEventListener("keyup", function() {
+            const val = this.value.toLowerCase().trim();
+            faqItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(val)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+    }
+});
+
+/* ============================================================
+   CHAT MODAL LOGIC
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    const chatInput = document.getElementById("chatInput");
+    const chatSendBtn = document.getElementById("chatSendBtn");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatChips = document.querySelectorAll(".chat-chip");
+
+    function addMessage(text, isUser = true) {
+        if (!text || !chatMessages) return;
+        const msgDiv = document.createElement("div");
+        msgDiv.className = isUser ? "chat-msg chat-msg-user" : "chat-msg chat-msg-bot";
+        msgDiv.textContent = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function handleSend() {
+        if (!chatInput) return;
+        const text = chatInput.value.trim();
+        if (text) {
+            addMessage(text, true);
+            chatInput.value = "";
+            
+            // Fake bot reply
+            setTimeout(() => {
+                addMessage("Thank you for your message! An agent will be with you shortly to assist with: " + text, false);
+            }, 1000);
+        }
+    }
+
+    if (chatSendBtn && chatInput) {
+        chatSendBtn.addEventListener("click", handleSend);
+        chatInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter") handleSend();
+        });
+    }
+
+    if (chatChips) {
+        chatChips.forEach(chip => {
+            chip.addEventListener("click", function() {
+                const msg = this.getAttribute("data-msg");
+                addMessage(msg, true);
+                
+                // Fake bot reply
+                setTimeout(() => {
+                    addMessage("I can definitely help you with that! Processing your request...", false);
+                }, 1000);
+            });
+        });
+    }
+});
+
+/* ============================================================
+   FAVORITES MODAL LOGIC
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    const favRemoveBtns = document.querySelectorAll(".fav-remove");
+    favRemoveBtns.forEach(btn => {
+        btn.addEventListener("click", function() {
+            const btn = this;
+            const productId = btn.getAttribute('data-id');
+            const card = btn.closest(".fav-card");
+            
+            if (!productId) return;
+
+            // Optional: disable button while loading
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+
+            fetch(`/favorites/toggle/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && !data.is_favorited) {
+                    if (card) {
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.remove();
+                            // check if grid is empty now
+                            const grid = document.querySelector('.fav-grid');
+                            if (grid && grid.querySelectorAll('.fav-card').length === 0) {
+                                grid.innerHTML = `
+                                <div class="text-center py-4 text-muted" style="grid-column: 1 / -1;">
+                                    <i class="fas fa-heart-broken mb-3" style="font-size: 2rem; opacity: 0.5;"></i>
+                                    <p>You haven't added any favorite drinks yet!</p>
+                                </div>`;
+                            }
+                        }, 300);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling favorite:', error);
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'auto';
+            });
+        });
+    });
+});
+
+/* ============================================================
+   FAVORITES TOGGLE (HOME PAGE)
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", function() {
+    const favToggleBtns = document.querySelectorAll(".fav-toggle-btn");
+    favToggleBtns.forEach(btn => {
+        btn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const btn = this;
+            const productId = btn.getAttribute('data-id');
+            const icon = btn.querySelector('i');
+            
+            if (!productId) return;
+
+            btn.style.pointerEvents = 'none';
+            btn.style.opacity = '0.5';
+
+            fetch(`/favorites/toggle/${productId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (data.is_favorited) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        icon.style.color = '#dc3545';
+                        
+                        // Append to modal
+                        if (data.product) {
+                            appendToFavoritesModal(data.product);
+                        }
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        icon.style.color = '';
+                        
+                        // Remove from modal
+                        const modalFavCard = document.querySelector(`#fav-card-${productId}`);
+                        if (modalFavCard) {
+                            modalFavCard.style.opacity = '0';
+                            setTimeout(() => {
+                                modalFavCard.remove();
+                                checkEmptyFavoritesGrid();
+                            }, 300);
+                        }
+                    }
+                }
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            })
+            .catch(error => {
+                console.error('Error toggling favorite:', error);
+                btn.style.pointerEvents = 'auto';
+                btn.style.opacity = '1';
+            });
+        });
+    });
+
+    function checkEmptyFavoritesGrid() {
+        const grid = document.querySelector('.fav-grid');
+        if (grid && grid.querySelectorAll('.fav-card').length === 0) {
+            grid.innerHTML = `
+            <div class="text-center py-4 text-muted" style="grid-column: 1 / -1;">
+                <i class="fas fa-heart-broken mb-3" style="font-size: 2rem; opacity: 0.5;"></i>
+                <p>You haven't added any favorite drinks yet!</p>
+            </div>`;
+        }
+    }
+
+    function appendToFavoritesModal(product) {
+        const grid = document.querySelector('.fav-grid');
+        if (!grid) return;
+        
+        const emptyState = grid.querySelector('.text-center.py-4');
+        if (emptyState) emptyState.remove();
+        
+        const cardHtml = `
+        <div class="fav-card" id="fav-card-${product.id}">
+            <div class="fav-img">
+                <img src="${product.image}" alt="${product.name}" />
+                <button class="fav-remove" data-id="${product.id}" title="Remove"><i class="fas fa-heart"></i></button>
+            </div>
+            <div class="fav-info">
+                <h6>${product.name}</h6>
+                <small class="text-muted d-block mb-2">${product.category} • $${product.price}</small>
+                <button class="btn btn-sm btn-danger w-100 rounded-pill fav-order-btn"><i class="fas fa-shopping-bag me-1"></i>Order Now</button>
+            </div>
+        </div>`;
+        
+        grid.insertAdjacentHTML('beforeend', cardHtml);
+        
+        // Re-attach event listener to new remove button
+        const newBtn = grid.querySelector(`#fav-card-${product.id} .fav-remove`);
+        if (newBtn) {
+            newBtn.addEventListener('click', function() {
+                const btn = this;
+                const pId = btn.getAttribute('data-id');
+                const card = btn.closest(".fav-card");
+                
+                if (!pId) return;
+
+                btn.style.opacity = '0.5';
+                btn.style.pointerEvents = 'none';
+
+                fetch(`/favorites/toggle/${pId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success && !d.is_favorited) {
+                        if (card) {
+                            card.style.opacity = '0';
+                            setTimeout(() => {
+                                card.remove();
+                                checkEmptyFavoritesGrid();
+                                // Also update heart icon on home page if it exists
+                                const homeBtn = document.querySelector(`.fav-toggle-btn[data-id="${pId}"] i`);
+                                if (homeBtn) {
+                                    homeBtn.classList.remove('fas');
+                                    homeBtn.classList.add('far');
+                                    homeBtn.style.color = '';
+                                }
+                            }, 300);
+                        }
+                    }
+                });
+            });
+        }
+    }
+});

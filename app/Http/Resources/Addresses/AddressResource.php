@@ -32,6 +32,7 @@ class AddressResource extends JsonResource
             'delivery_zone' => [
                 'id' => $this->deliveryZone->id ?? null,
                 'name' => $this->deliveryZone->name ?? null,
+                'delivery_fee' => isset($this->deliveryZone->delivery_fee) ? number_format($this->deliveryZone->delivery_fee, 2) . ' EGP' : '0.00 EGP',
             ],
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

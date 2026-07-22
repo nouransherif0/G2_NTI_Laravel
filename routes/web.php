@@ -22,4 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart', function () {
         return view('front.cart');
     })->name('cart.index');
+
+    Route::get('/checkout', function () {
+        return view('front.checkout');
+    })->name('checkout.index');
+
+    Route::post('/favorites/toggle/{product}', [\App\Http\Controllers\Web\FavoriteController::class, 'toggle'])->name('favorites.toggle');
 });

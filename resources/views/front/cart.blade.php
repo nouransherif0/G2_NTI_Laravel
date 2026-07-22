@@ -296,10 +296,10 @@
                     <span>Total</span>
                     <span id="summaryTotal" style="color: var(--primary);">0.00 EGP</span>
                 </div>
-                <button class="checkout-btn"><i class="fas fa-lock me-2"></i> Secure Checkout</button>
+                <a href="{{ route('checkout.index') }}" class="checkout-btn text-center d-block text-decoration-none"><i class="fas fa-lock me-2"></i> Secure Checkout</a>
             </div>
         </div>
-        
+
         <div class="empty-cart" id="emptyCartMessage" style="display: none;">
             <i class="fas fa-shopping-basket"></i>
             <p>Your cart is currently empty.</p>
@@ -329,7 +329,7 @@ function loadCart() {
     })
     .then(data => {
         document.getElementById('cartLoader').style.display = 'none';
-        
+
         if(data.data && data.data.items && data.data.items.length > 0) {
             document.getElementById('cartContent').style.display = 'grid';
             document.getElementById('emptyCartMessage').style.display = 'none';
@@ -348,11 +348,11 @@ function loadCart() {
 function renderCartItems(items) {
     const container = document.getElementById('cartItemsList');
     container.innerHTML = '';
-    
+
     items.forEach(item => {
         // Fallback for image
         let imageUrl = item.product.image ? item.product.image : '/front/photos/coffee/esspresso.jpg';
-        
+
         let addonsHtml = '';
         if(item.add_ons && item.add_ons.length > 0) {
             // Depending on how API returns add_ons, adapt this.
@@ -360,7 +360,7 @@ function renderCartItems(items) {
             // Assuming API might just return the IDs for now.
             addonsHtml = `<div class="cart-item-addons">Add-ons: ${item.add_ons.length} selected</div>`;
         }
-        
+
         const html = `
             <div class="cart-item" data-id="${item.id}">
                 <img src="${imageUrl}" class="cart-item-img" alt="${item.product.name}" onerror="this.src='/front/photos/coffee/esspresso.jpg'">
@@ -391,11 +391,11 @@ function updateItem(itemId, newQty) {
         removeItem(itemId);
         return;
     }
-    
+
     // Optimistic UI update
     const itemEl = document.querySelector(`.cart-item[data-id="${itemId}"]`);
     if(itemEl) itemEl.querySelector('.qty-input').value = newQty;
-    
+
     fetch('/api/v1/cart/items/' + itemId, {
         method: 'PUT',
         headers: {
@@ -445,7 +445,7 @@ function removeItem(itemId) {
 function processRemoveItem(itemId) {
     const itemEl = document.querySelector(`.cart-item[data-id="${itemId}"]`);
     if(itemEl) itemEl.style.opacity = '0.5';
-    
+
     fetch('/api/v1/cart/items/' + itemId, {
         method: 'DELETE',
         headers: {
@@ -462,6 +462,7 @@ function processRemoveItem(itemId) {
         console.error('Error removing item:', error);
         loadCart(); // Revert
     });
+    
 }
 </script>
 @endsection

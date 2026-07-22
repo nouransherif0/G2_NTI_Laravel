@@ -49,4 +49,9 @@ class Product extends Model
     public function casts(): array{
         return['is_featured'=>'boolean'];
     }
+
+    public function favoritedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'favorites');
+    }
 }

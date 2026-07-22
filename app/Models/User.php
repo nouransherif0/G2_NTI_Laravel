@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'phone', 'role'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'role', 'profile_image'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -49,5 +49,18 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function getProfileImageUrlAttribute()
+    {
+        if ($this->profile_image) {
+            return asset('storage/' . $this->profile_image);
+        }
+        return asset('front/photos/matcha/pink matcha.jpg'); // Default fallback
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Product::class, 'favorites');
     }
 }

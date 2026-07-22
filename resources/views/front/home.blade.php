@@ -19,10 +19,6 @@
                   <p class="hdesc">From velvety lattes and bright matcha to refreshing juices and smoothies, every cup is made for your slow moments and sweet cravings.</p>
                   <div class="d-flex flex-wrap gap-3 mb-2">
                      <a href="#menu" class="btn-red"><i class="fas fa-coffee"></i>Explore Menu</a>
-                     <a href="https://www.youtube.com/watch?v=RXv_uIN6e-Y" class="magnific_popup btn-play popup-youtube">
-                        <div class="pico"><i class="fas fa-play"></i></div>
-                        <span>Watch Our Story</span>
-                     </a>
                   </div>
                   <div class="hstats d-flex gap-3 flex-wrap mt-4">
                      <div class="hstat"><span class="snum">850<em>+</em></span><small>Happy Guests</small></div>
@@ -182,7 +178,15 @@
                         @if($product->is_featured)
                         <div class="mbdg hot"><i class="fas fa-star"></i> Hot</div>
                         @endif
-                        <div class="mhrt"><i class="far fa-heart"></i></div>
+                        @auth
+                        <div class="mhrt fav-toggle-btn" data-id="{{ $product->id }}">
+                           <i class="{{ Auth::user()->favorites->contains($product->id) ? 'fas' : 'far' }} fa-heart"></i>
+                        </div>
+                        @else
+                        <div class="mhrt" onclick="window.location.href='{{ route('login') }}'">
+                           <i class="far fa-heart"></i>
+                        </div>
+                        @endauth
                      </div>
                      <div class="mbody">
                         <div class="mcat">{{ $product->subcategory->category->name ?? 'Uncategorized' }}</div>

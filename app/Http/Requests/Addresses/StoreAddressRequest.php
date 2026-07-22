@@ -15,9 +15,9 @@ class StoreAddressRequest extends FormRequest
     {
         return [
             'delivery_zone_id' => 'required|integer|exists:delivery_zones,id',
-            'street' => 'required|string|max:255',
+            'street' => 'required|string|min:3|max:255',
             'building_number' => 'required|string|max:50',
-            'phone_number' => 'required|string|max:20',
+            'phone_number' => ['required', 'string', 'regex:/^01[0125][0-9]{8}$/'],
             'label' => 'nullable|string|max:100',
             'floor' => 'nullable|string|max:50',
             'apartment' => 'nullable|string|max:50',
@@ -61,7 +61,7 @@ class StoreAddressRequest extends FormRequest
             'building_number.min' => 'Building Number is below the minimum allowed length.',
             'phone_number.required' => 'Phone Number is required.',
             'phone_number.string' => 'Phone Number must be a string.',
-            'phone_number.numeric' => 'Phone Number must be a number.',
+            'phone_number.regex' => 'Phone Number must be a valid Egyptian mobile number (e.g. 010, 011, 012, 015) with exactly 11 digits.',
             'phone_number.integer' => 'Phone Number must be an integer.',
             'phone_number.exists' => 'The selected Phone Number is invalid.',
             'phone_number.boolean' => 'Phone Number must be true or false.',
