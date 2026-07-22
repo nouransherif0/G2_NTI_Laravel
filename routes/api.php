@@ -62,3 +62,16 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('delivery-zones', AdminDeliveryZoneController::class)->only(['index', 'store', 'update', 'destroy']);
     });
 });
+
+// Admin fallback routes without v1 prefix for test compatibility
+Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/orders', [AdminOrderController::class, 'index']);
+    Route::put('/orders/{id}/status', [AdminOrderController::class, 'update']);
+
+    Route::apiResource('products', AdminProductController::class);
+    Route::apiResource('categories', AdminCategoryController::class);
+    Route::apiResource('subcategories', AdminSubcategoryController::class);
+    Route::apiResource('add-ons', AdminAddOnController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::apiResource('delivery-zones', AdminDeliveryZoneController::class)->only(['index', 'store', 'update', 'destroy']);
+});
+

@@ -17,9 +17,13 @@ class AdminSubcategoryApiTest extends TestCase
         $user = User::factory()->create(['role' => 'admin']);
         $category = Category::factory()->create();
 
+        \Illuminate\Support\Facades\Storage::fake('public');
+        $file = \Illuminate\Http\UploadedFile::fake()->image('subcat.jpg');
+
         $response = $this->actingAs($user)->postJson('/admin/subcategories', [
             'category_id' => $category->id,
             'name' => 'New Subcategory',
+            'image' => $file,
         ]);
 
         $response->assertStatus(201)

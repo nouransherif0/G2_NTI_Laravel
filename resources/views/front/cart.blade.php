@@ -367,7 +367,7 @@ function renderCartItems(items) {
                 <div class="cart-item-details">
                     <div class="cart-item-title">${item.product.name}</div>
                     ${addonsHtml}
-                    <div class="cart-item-price">${item.item_price_with_addons}</div>
+                    <div class="cart-item-price">${item.item_price_with_addons} EGP</div>
                 </div>
                 <div class="cart-item-actions">
                     <button class="qty-btn" onclick="updateItem(${item.id}, ${item.quantity - 1})"><i class="fas fa-minus"></i></button>
@@ -382,8 +382,8 @@ function renderCartItems(items) {
 }
 
 function updateSummary(subtotal) {
-    document.getElementById('summarySubtotal').textContent = subtotal;
-    document.getElementById('summaryTotal').textContent = subtotal;
+    document.getElementById('summarySubtotal').textContent = subtotal + ' EGP';
+    document.getElementById('summaryTotal').textContent = subtotal + ' EGP';
 }
 
 function updateItem(itemId, newQty) {

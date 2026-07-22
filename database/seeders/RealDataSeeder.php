@@ -20,8 +20,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/coffee/coffee cate.jpg'
         ]);
 
-        $subHotCoffee = Subcategory::create(['category_id' => $catCoffee->id, 'name' => 'Hot Coffee']);
-        $subIcedCoffee = Subcategory::create(['category_id' => $catCoffee->id, 'name' => 'Iced Coffee']);
+        $subHotCoffee = Subcategory::create(['category_id' => $catCoffee->id, 'name' => 'Hot Coffee', 'image' => 'image/coffee/hot coffee category .jpg']);
+        $subIcedCoffee = Subcategory::create(['category_id' => $catCoffee->id, 'name' => 'Iced Coffee', 'image' => 'image/coffee/iced coffee category .jpg']);
 
         Product::create(['subcategory_id' => $subHotCoffee->id, 'name' => 'Espresso', 'price' => 20, 'image' => 'image/coffee/esspresso.jpg', 'description' => 'Rich and bold espresso.', 'stock' => 50, 'is_featured' => true]);
         Product::create(['subcategory_id' => $subHotCoffee->id, 'name' => 'Hot Americano', 'price' => 25, 'image' => 'image/coffee/hot amrecano.jpg', 'description' => 'Classic hot americano.', 'stock' => 50, 'is_featured' => false]);
@@ -39,8 +39,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/fresh juice/fresh juice.jpg'
         ]);
 
-        $subSingleJuice = Subcategory::create(['category_id' => $catJuice->id, 'name' => 'Single Fruit Juice']);
-        $subBlendedJuice = Subcategory::create(['category_id' => $catJuice->id, 'name' => 'Blended Juice']);
+        $subSingleJuice = Subcategory::create(['category_id' => $catJuice->id, 'name' => 'Single Fruit Juice', 'image' => 'image/fresh juice/fresh juice.jpg']);
+        $subBlendedJuice = Subcategory::create(['category_id' => $catJuice->id, 'name' => 'Blended Juice', 'image' => 'image/fresh juice/Beet-Apple Juice.jpg']);
 
         Product::create(['subcategory_id' => $subSingleJuice->id, 'name' => 'Mango Juice', 'price' => 30, 'image' => 'image/fresh juice/mango juice.jpg', 'description' => 'Fresh mango juice.', 'stock' => 50, 'is_featured' => true]);
         Product::create(['subcategory_id' => $subSingleJuice->id, 'name' => 'Orange Juice', 'price' => 25, 'image' => 'image/fresh juice/orange juice.jpg', 'description' => 'Freshly squeezed orange juice.', 'stock' => 50, 'is_featured' => false]);
@@ -57,8 +57,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/matcha/matcha cate.jpg'
         ]);
 
-        $subHotMatcha = Subcategory::create(['category_id' => $catMatcha->id, 'name' => 'Hot Matcha']);
-        $subIcedMatcha = Subcategory::create(['category_id' => $catMatcha->id, 'name' => 'Iced Matcha']);
+        $subHotMatcha = Subcategory::create(['category_id' => $catMatcha->id, 'name' => 'Hot Matcha', 'image' => 'image/matcha/hot matcha.jpg']);
+        $subIcedMatcha = Subcategory::create(['category_id' => $catMatcha->id, 'name' => 'Iced Matcha', 'image' => 'image/matcha/iced matcha .jpg']);
 
         Product::create(['subcategory_id' => $subHotMatcha->id, 'name' => 'Hot Matcha', 'price' => 45, 'image' => 'image/matcha/hot matcha.jpg', 'description' => 'Traditional hot matcha.', 'stock' => 50, 'is_featured' => false]);
         Product::create(['subcategory_id' => $subHotMatcha->id, 'name' => 'Hot Matcha Latte', 'price' => 50, 'image' => 'image/matcha/hot matcha latte.jpg', 'description' => 'Creamy hot matcha latte.', 'stock' => 50, 'is_featured' => true]);
@@ -75,8 +75,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/refreshers/refreshers.jpg'
         ]);
 
-        $subMojito = Subcategory::create(['category_id' => $catRefreshers->id, 'name' => 'Mojito']);
-        $subIcedTea = Subcategory::create(['category_id' => $catRefreshers->id, 'name' => 'Iced Tea']);
+        $subMojito = Subcategory::create(['category_id' => $catRefreshers->id, 'name' => 'Mojito', 'image' => 'image/refreshers/mojito.jpg']);
+        $subIcedTea = Subcategory::create(['category_id' => $catRefreshers->id, 'name' => 'Iced Tea', 'image' => 'image/refreshers/peach iced tea.jpg']);
 
         Product::create(['subcategory_id' => $subMojito->id, 'name' => 'Classic Mojito', 'price' => 35, 'image' => 'image/refreshers/mojito.jpg', 'description' => 'Classic mint and lime mojito.', 'stock' => 50, 'is_featured' => false]);
         Product::create(['subcategory_id' => $subMojito->id, 'name' => 'Pina Colada Mojito', 'price' => 45, 'image' => 'image/refreshers/pina colada mojito.jpg', 'description' => 'Tropical pina colada mojito.', 'stock' => 50, 'is_featured' => true]);
@@ -93,8 +93,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/smoothies/smoothies.jpg'
         ]);
 
-        $subFruitSmoothie = Subcategory::create(['category_id' => $catSmoothies->id, 'name' => 'Fruit Smoothies']);
-        $subDessertSmoothie = Subcategory::create(['category_id' => $catSmoothies->id, 'name' => 'Dessert Smoothies']);
+        $subFruitSmoothie = Subcategory::create(['category_id' => $catSmoothies->id, 'name' => 'Fruit Smoothies', 'image' => 'image/smoothies/berry.jpg']);
+        $subDessertSmoothie = Subcategory::create(['category_id' => $catSmoothies->id, 'name' => 'Dessert Smoothies', 'image' => 'image/smoothies/nutella smoothie.jpg']);
 
         Product::create(['subcategory_id' => $subFruitSmoothie->id, 'name' => 'Mixed Berry Smoothie', 'price' => 45, 'image' => 'image/smoothies/berry.jpg', 'description' => 'Blend of wild berries.', 'stock' => 50, 'is_featured' => true]);
         Product::create(['subcategory_id' => $subFruitSmoothie->id, 'name' => 'Mango Smoothie', 'price' => 40, 'image' => 'image/smoothies/mango smoothie.jpg', 'description' => 'Creamy mango smoothie.', 'stock' => 50, 'is_featured' => false]);
@@ -109,8 +109,8 @@ class RealDataSeeder extends Seeder
             'image' => 'image/shop/shop.jpg'
         ]);
 
-        $subEquipment = Subcategory::create(['category_id' => $catShop->id, 'name' => 'Mugs & Cups']);
-        $subPowders = Subcategory::create(['category_id' => $catShop->id, 'name' => 'Coffee & Matcha Powders']);
+        $subEquipment = Subcategory::create(['category_id' => $catShop->id, 'name' => 'Mugs & Cups', 'image' => 'image/shop/Ceramic Mug.jpg']);
+        $subPowders = Subcategory::create(['category_id' => $catShop->id, 'name' => 'Coffee & Matcha Powders', 'image' => 'image/shop/japanese mtcha.jpg']);
 
         Product::create(['subcategory_id' => $subEquipment->id, 'name' => 'Ceramic Mug', 'price' => 150, 'image' => 'image/shop/Ceramic Mug.jpg', 'description' => 'High quality ceramic mug.', 'stock' => 50, 'is_featured' => false]);
         Product::create(['subcategory_id' => $subEquipment->id, 'name' => 'Reusable Cup', 'price' => 120, 'image' => 'image/shop/reusable.jpg', 'description' => 'Eco-friendly reusable cup.', 'stock' => 50, 'is_featured' => true]);

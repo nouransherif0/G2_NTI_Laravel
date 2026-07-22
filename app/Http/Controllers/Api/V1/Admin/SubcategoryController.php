@@ -37,7 +37,16 @@ class SubcategoryController extends Controller
     )]
     public function store(StoreSubcategoryRequest $request)
     {
-        $subcategory = $this->subcategoryService->createSubcategory($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('photoe/subcategories'), $filename);
+            $data['image'] = 'photoe/subcategories/' . $filename;
+        }
+
+        $subcategory = $this->subcategoryService->createSubcategory($data);
         return new SubcategoryResource($subcategory);
     }
 
@@ -72,7 +81,16 @@ class SubcategoryController extends Controller
     )]
     public function update(UpdateSubcategoryRequest $request, $id)
     {
-        $subcategory = $this->subcategoryService->updateSubcategory($id, $request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('photoe/subcategories'), $filename);
+            $data['image'] = 'photoe/subcategories/' . $filename;
+        }
+
+        $subcategory = $this->subcategoryService->updateSubcategory($id, $data);
         return new SubcategoryResource($subcategory);
     }
 

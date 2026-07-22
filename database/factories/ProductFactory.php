@@ -13,7 +13,7 @@ class ProductFactory extends Factory
             'subcategory_id' => Subcategory::factory(),
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence(),
-            'price' => $this->faker->randomFloat(2, 10, 500),
+            'price' => $this->faker->randomFloat(2, 90, 200),
             'stock' => $this->faker->numberBetween(10, 100),
             'image' => $this->faker->imageUrl(),
         ];

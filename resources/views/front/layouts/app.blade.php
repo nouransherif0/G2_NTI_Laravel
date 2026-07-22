@@ -86,7 +86,7 @@
                   @endguest
 
                   <a href="{{ url('/#menu') }}" class="nav-link nav-cta"><i class="fas fa-shopping-bag me-1"></i>Order Now</a>
-                  
+
                   @auth
                   <!-- Hamburger Side Menu Trigger -->
                   <button id="hamburgerBtn" class="hamburger-btn ms-2" title="Open Menu Side Drawer">
@@ -143,7 +143,7 @@
 
 
 
-      
+
 
         @yield('content')
 
@@ -307,11 +307,16 @@
                   <p class="sm-email">{{ Auth::user()->email }}</p>
                </div>
                <div class="sm-profile-actions">
-                  <a href="{{ route('profile.edit') }}" class="sm-btn sm-btn-outline"><i class="fas fa-user-gear me-1"></i> My Profile</a>
-                  <form method="POST" action="{{ route('logout') }}" style="flex:1;">
+                  @if(Auth::user()->isAdmin())
+                     <a href="{{ route('admin.dashboard') }}" class="sm-btn sm-btn-primary mb-2 w-100"><i class="fas fa-chart-line me-1"></i> Admin Dashboard</a>
+                  @endif
+                  <div class="d-flex w-100 gap-2">
+                     <a href="{{ route('profile.edit') }}" class="sm-btn sm-btn-outline" style="flex:1;"><i class="fas fa-user-gear me-1"></i> My Profile</a>
+                     <form method="POST" action="{{ route('logout') }}" style="flex:1;">
                       @csrf
                       <button type="submit" id="smLogoutBtn" class="sm-btn sm-btn-danger w-100"><i class="fas fa-sign-out-alt me-1"></i> Log Out</button>
                   </form>
+                  </div>
                </div>
             </div>
 
@@ -513,7 +518,7 @@
                      </div>
                      <div class="fav-info">
                         <h6>{{ $favorite->name }}</h6>
-                        <small class="text-muted d-block mb-2">{{ $favorite->subcategory->name ?? 'Drink' }} • ${{ number_format($favorite->price, 2) }}</small>
+                        <small class="text-muted d-block mb-2">{{ $favorite->subcategory->name ?? 'Drink' }} • EGP {{ number_format($favorite->price, 2) }}</small>
                         <button class="btn btn-sm btn-danger w-100 rounded-pill fav-order-btn"><i class="fas fa-shopping-bag me-1"></i>Order Now</button>
                      </div>
                   </div>

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Admin;
 
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -25,9 +26,12 @@ class AdminCategoryApiTest extends TestCase
     public function test_admin_can_create_a_category()
     {
         $user = User::factory()->create(['role' => 'admin']);
+        Storage::fake('public');
+        $file = \Illuminate\Http\UploadedFile::fake()->image('category.jpg');
 
         $response = $this->actingAs($user)->postJson('/admin/categories', [
             'name' => 'New Category',
+            'image' => $file,
         ]);
 
         $response->assertStatus(201)

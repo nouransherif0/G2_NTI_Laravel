@@ -14,8 +14,8 @@ class OrderFactory extends Factory
             'user_id' => User::factory(),
             'address_id' => Address::factory(),
             'status' => $this->faker->randomElement(['pending', 'confirmed', 'preparing', 'out_for_delivery', 'delivered', 'cancelled']),
-            'total_price' => $this->faker->randomFloat(2, 50, 1000),
-            'delivery_fee' => $this->faker->randomFloat(2, 10, 50),
+            'total_price' => $this->faker->randomFloat(2, 100, 1500),
+            'delivery_fee' => $this->faker->randomFloat(2, 20, 100),
             'payment_method' => $this->faker->randomElement(['cash', 'credit_card']),
         ];
     }

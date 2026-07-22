@@ -522,12 +522,12 @@ function loadCartSummary() {
             list.insertAdjacentHTML('beforeend', `
                 <div class="summary-item">
                     <span class="summary-item-name">${item.quantity}x ${item.product.name}</span>
-                    <span class="summary-item-price">${item.total_price}</span>
+                    <span class="summary-item-price">${item.total_price} EGP</span>
                 </div>
             `);
         });
         
-        document.getElementById('summarySubtotal').textContent = cartData.subtotal;
+        document.getElementById('summarySubtotal').textContent = cartData.subtotal + ' EGP';
         
         // Parse numerical subtotal for calculations
         currentSubtotal = parseFloat(cartData.subtotal.replace(/[^0-9.]/g, ''));

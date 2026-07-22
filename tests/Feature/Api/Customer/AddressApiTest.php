@@ -35,7 +35,7 @@ class AddressApiTest extends TestCase
             'delivery_zone_id' => $zone->id,
             'street' => 'Test Street',
             'building_number' => '10A',
-            'phone_number' => '1234567890',
+            'phone_number' => '01012345678',
             'is_default' => true,
         ]);
 
