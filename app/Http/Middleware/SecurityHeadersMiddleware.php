@@ -19,7 +19,7 @@ class SecurityHeadersMiddleware
 
         if (method_exists($response, 'header')) {
             // Content Security Policy (CSP)
-            $response->header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net; font-src 'self' https://fonts.bunny.net; img-src 'self' data:; frame-ancestors 'self'; form-action 'self';");
+            $response->header('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://fonts.googleapis.com; font-src 'self' data: https://fonts.bunny.net https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'self'; form-action 'self';");
             
             // Anti-clickjacking (X-Frame-Options)
             $response->header('X-Frame-Options', 'SAMEORIGIN');

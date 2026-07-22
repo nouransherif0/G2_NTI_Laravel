@@ -35,6 +35,7 @@ class CartItemResource extends JsonResource
             'product' => [
                 'id' => $this->product->id ?? null,
                 'name' => $this->product->name ?? null,
+                'image' => $this->product->image ? asset($this->product->image) : null,
                 'base_price' => number_format($productPrice, 2) . ' EGP',
             ],
             'quantity' => $this->quantity,
