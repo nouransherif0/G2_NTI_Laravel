@@ -155,9 +155,9 @@
                <div class="sline"></div>
             </div>
             <div class="text-center mb-4" data-aos="fade-up">
-               <button class="filtbtn active" data-f="all">All</button>
+               <button class="filtbtn {{ request('category', 'all') === 'all' ? 'active' : '' }}" data-f="all">All</button>
                @foreach($categories as $category)
-               <button class="filtbtn" data-f="{{ strtolower($category->name) }}">{{ $category->name }}</button>
+               <button class="filtbtn {{ strtolower(request('category')) === strtolower($category->name) ? 'active' : '' }}" data-f="{{ strtolower($category->name) }}">{{ $category->name }}</button>
                @endforeach
             </div>
             <div class="row g-4" id="mgrid">
@@ -174,7 +174,7 @@
                      data-desc="{{ $product->description }}"
                      data-tags="Bold,Bestseller,{{ $product->is_featured ? 'Hot' : '' }}">
                      <div class="mimg">
-                        <img src="{{ $product->image ? asset($product->image) : asset('front/photos/coffee/esspresso.jpg') }}" alt="{{ $product->name }}"/>
+                        <img src="{{ $product->image ? asset($product->image) : asset('front/photos/coffee/esspresso.jpg') }}" alt="{{ $product->name }}" loading="lazy"/>
                         @if($product->is_featured)
                         <div class="mbdg hot"><i class="fas fa-star"></i> Hot</div>
                         @endif
@@ -204,7 +204,36 @@
                </div>
                @endforeach
             </div>
-            <div class="text-center mt-5"><a href="#" class="btn-red"><i class="fas fa-th-large"></i>View Full Menu</a></div>
+            
+            <div class="mt-5 d-flex justify-content-center custom-pagination">
+               {{ $products->links() }}
+            </div>
+            <style>
+               .custom-pagination .pagination { gap: 10px; align-items: center; }
+               .custom-pagination .page-link { 
+                  color: #e8281a; 
+                  border-radius: 50px !important; 
+                  padding: 10px 24px; 
+                  border: none; 
+                  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+                  font-weight: 600;
+                  transition: all 0.3s ease;
+               }
+               .custom-pagination .page-item.active .page-link, 
+               .custom-pagination .page-link:hover {
+                  background: linear-gradient(135deg, #e8281a, #c01e12);
+                  color: #fff;
+                  box-shadow: 0 8px 20px rgba(232, 40, 26, 0.3);
+                  transform: translateY(-2px);
+               }
+               .custom-pagination .page-item.disabled .page-link {
+                  color: #999;
+                  background: #f8f9fa;
+                  box-shadow: none;
+                  transform: none;
+               }
+               .custom-pagination p.text-muted { display: none; } /* Hide 'Showing X to Y' text */
+            </style>
          </div>
       </section>
 	  
@@ -844,5 +873,111 @@
          </div>
       </section>
 	  
-      
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+         const menuSection = document.getElementById('menu');
+         
+         menuSection.addEventListener('click', function(e) {
+            // Check if clicked element is a pagination link
+            const paginationLink = e.target.closest('.custom-pagination a');
+            if(paginationLink) {
+               e.preventDefault(); // Prevent full page reload
+               const url = paginationLink.href;
+               
+               // Optional: Show a loading state (opacity)
+               const productsGrid = menuSection.querySelector('.row.g-4:not(.mb-5)');
+               if(productsGrid) productsGrid.style.opacity = '0.5';
+
+               fetch(url)
+                  .then(response => response.text())
+                  .then(html => {
+                     // Parse the fetched HTML
+                     const parser = new DOMParser();
+                     const doc = parser.parseFromString(html, 'text/html');
+                     
+                     // Get the new menu section content
+                     const newMenuContent = doc.getElementById('menu').innerHTML;
+                     
+                     // Replace current menu section with new content
+                     menuSection.innerHTML = newMenuContent;
+                     
+                     // Re-bind Filter Buttons
+                     menuSection.querySelectorAll('.filtbtn').forEach(function(btn) {
+                         btn.addEventListener('click', function() {
+                             if(typeof filterMenu === 'function') filterMenu(this.getAttribute('data-f'));
+                         });
+                     });
+
+                     // Re-bind Card Click
+                     menuSection.querySelectorAll('.mcard').forEach(function(card) {
+                         card.addEventListener('click', function() {
+                             if(typeof openMenuPop === 'function') openMenuPop(this);
+                         });
+                     });
+
+                     // Re-bind Add Button (+)
+                     menuSection.querySelectorAll('.madd').forEach(function(btn) {
+                         btn.addEventListener('click', function(e) {
+                             e.stopPropagation();
+                             if(typeof openMenuPop === 'function') openMenuPop(this.closest('.mcard'));
+                         });
+                     });
+
+                     // Re-bind Favorites Toggle
+                     menuSection.querySelectorAll('.fav-toggle-btn').forEach(function(btn) {
+                         // We clone the button to remove old listeners (if any) and attach the generic logic
+                         // But since these are new DOM elements, we just attach it
+                         btn.addEventListener("click", function(e) {
+                             e.preventDefault();
+                             e.stopPropagation();
+                             const btnEl = this;
+                             const productId = btnEl.getAttribute('data-id');
+                             const icon = btnEl.querySelector('i');
+                             
+                             if (!productId) return;
+
+                             btnEl.style.pointerEvents = 'none';
+                             btnEl.style.opacity = '0.5';
+
+                             fetch(`/favorites/toggle/${productId}`, {
+                                 method: 'POST',
+                                 headers: {
+                                     'Content-Type': 'application/json',
+                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                 },
+                             })
+                             .then(response => response.json())
+                             .then(data => {
+                                 if (data.success) {
+                                     if (data.is_favorited) {
+                                         icon.classList.remove('far');
+                                         icon.classList.add('fas');
+                                         icon.style.color = '#dc3545';
+                                     } else {
+                                         icon.classList.remove('fas');
+                                         icon.classList.add('far');
+                                         icon.style.color = '';
+                                     }
+                                 }
+                                 btnEl.style.pointerEvents = 'auto';
+                                 btnEl.style.opacity = '1';
+                             })
+                             .catch(error => {
+                                 btnEl.style.pointerEvents = 'auto';
+                                 btnEl.style.opacity = '1';
+                             });
+                         });
+                     });
+
+                     // Smooth scroll to top of menu
+                     menuSection.scrollIntoView({ behavior: 'smooth' });
+                     
+                     // Re-initialize AOS or other plugins if necessary
+                     if(typeof AOS !== 'undefined') AOS.refresh();
+                  });
+            }
+         });
+      });
+      </script>
+
 @endsection

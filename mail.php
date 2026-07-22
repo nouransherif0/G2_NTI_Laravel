@@ -18,7 +18,7 @@ class mail extends Mailable
      * Create a new message instance.
      */
     public $orderDetails;
-public $userName;
+    public $userName;
     public function __construct($userName, $orderDetails)
     {
         $this->userName = $userName;

@@ -10,10 +10,21 @@ use App\Models\Product;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::withCount('products')->get();
-        $products = Product::with('subcategory.category')->get();
+        
+        $query = Product::with('subcategory.category');
+        
+        if ($request->has('category') && $request->category !== 'all') {
+            $catName = strtolower($request->category);
+            $query->whereHas('subcategory.category', function ($q) use ($catName) {
+                // Assuming category name is matched case-insensitively
+                $q->whereRaw('LOWER(name) = ?', [$catName]);
+            });
+        }
+        
+        $products = $query->simplePaginate(12)->withQueryString();
 
         return view('front.home', compact('categories', 'products'));
     }

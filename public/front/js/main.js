@@ -115,30 +115,99 @@ $(document).ready(function() {
 
 
 function filterMenu(cat) {
-    // sync filter buttons
+    // sync filter buttons visually
     document.querySelectorAll('.filtbtn').forEach(function(b) {
         b.classList.toggle('active', b.getAttribute('data-f') === cat);
     });
-    // sync category cards
-    document.querySelectorAll('.catcard').forEach(function(c) {
-        c.classList.toggle('active', c.getAttribute('data-filter') === cat);
-    });
-    // show/hide menu cards
-    document.querySelectorAll('.mwrap').forEach(function(w) {
-        var c = w.getAttribute('data-c');
-        if (cat === 'all' || c === cat) {
-            w.classList.remove('gone');
-            w.style.opacity = '0';
-            w.style.transform = 'translateY(16px)';
-            setTimeout(function() {
-                w.style.transition = 'opacity .38s,transform .38s';
-                w.style.opacity = '1';
-                w.style.transform = 'translateY(0)';
-            }, 60);
-        } else {
-            w.classList.add('gone');
-        }
-    });
+
+    // Determine the URL for fetching
+    var url = new URL(window.location.href);
+    url.searchParams.set('category', cat);
+    url.searchParams.set('page', 1); // Reset to page 1
+
+    var menuSection = document.getElementById('menu');
+    if (!menuSection) return;
+
+    var productsGrid = menuSection.querySelector('.row.g-4:not(.mb-5)');
+    if (productsGrid) productsGrid.style.opacity = '0.5';
+
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            var newMenuContent = doc.getElementById('menu').innerHTML;
+            menuSection.innerHTML = newMenuContent;
+
+            // Re-bind events (using the function we defined or manually)
+            // Re-bind Filter Buttons
+            menuSection.querySelectorAll('.filtbtn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    filterMenu(this.getAttribute('data-f'));
+                });
+            });
+
+            // Re-bind Card Click
+            menuSection.querySelectorAll('.mcard').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    if(typeof openMenuPop === 'function') openMenuPop(this);
+                });
+            });
+
+            // Re-bind Add Button (+)
+            menuSection.querySelectorAll('.madd').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if(typeof openMenuPop === 'function') openMenuPop(this.closest('.mcard'));
+                });
+            });
+
+            // Re-bind Favorites Toggle
+            menuSection.querySelectorAll('.fav-toggle-btn').forEach(function(btn) {
+                btn.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const btnEl = this;
+                    const productId = btnEl.getAttribute('data-id');
+                    const icon = btnEl.querySelector('i');
+                    
+                    if (!productId) return;
+
+                    btnEl.style.pointerEvents = 'none';
+                    btnEl.style.opacity = '0.5';
+
+                    fetch(`/favorites/toggle/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (data.is_favorited) {
+                                icon.classList.remove('far');
+                                icon.classList.add('fas');
+                                icon.style.color = '#dc3545';
+                            } else {
+                                icon.classList.remove('fas');
+                                icon.classList.add('far');
+                                icon.style.color = '';
+                            }
+                        }
+                        btnEl.style.pointerEvents = 'auto';
+                        btnEl.style.opacity = '1';
+                    })
+                    .catch(error => {
+                        btnEl.style.pointerEvents = 'auto';
+                        btnEl.style.opacity = '1';
+                    });
+                });
+            });
+
+            if(typeof AOS !== 'undefined') AOS.refresh();
+        });
 }
 
 // Filter buttons

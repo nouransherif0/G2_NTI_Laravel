@@ -504,6 +504,7 @@
             </div>
             <div class="cm-body">
                <div class="fav-grid">
+                  @auth
                   @forelse(Auth::user()->favorites as $favorite)
                   <div class="fav-card" id="fav-card-{{ $favorite->id }}">
                      <div class="fav-img">
@@ -522,6 +523,12 @@
                       <p>You haven't added any favorite drinks yet!</p>
                   </div>
                   @endforelse
+                  @else
+                  <div class="text-center py-4 text-muted" style="grid-column: 1 / -1;">
+                      <i class="fas fa-lock mb-3" style="font-size: 2rem; opacity: 0.5;"></i>
+                      <p>Please <a href="{{ route('login') }}">login</a> to view your favorites.</p>
+                  </div>
+                  @endauth
                </div>
             </div>
          </div>
