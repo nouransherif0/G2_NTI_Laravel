@@ -61,8 +61,8 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/categories'), $filename);
-            $data['image'] = 'photoe/categories/' . $filename;
+            $file->move(public_path('front/photos/categories'), $filename);
+            $data['image'] = 'front/photos/categories/' . $filename;
         }
 
         $category = $this->categoryService->createCategory($data);
@@ -108,8 +108,8 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/categories'), $filename);
-            $data['image'] = 'photoe/categories/' . $filename;
+            $file->move(public_path('front/photos/categories'), $filename);
+            $data['image'] = 'front/photos/categories/' . $filename;
         }
 
         $category = $this->categoryService->updateCategory($id, $data);

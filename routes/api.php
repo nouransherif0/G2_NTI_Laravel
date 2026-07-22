@@ -34,7 +34,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/delivery-zones', [DeliveryZoneController::class, 'index']);
 
     // Protected User Routes (Require Authentication)
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum,web')->group(function () {
         // Orders
         Route::get('/orders', [OrderController::class, 'index']);
         Route::post('/orders', [OrderController::class, 'store']);

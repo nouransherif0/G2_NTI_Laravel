@@ -42,8 +42,8 @@ class SubcategoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/subcategories'), $filename);
-            $data['image'] = 'photoe/subcategories/' . $filename;
+            $file->move(public_path('front/photos/subcategories'), $filename);
+            $data['image'] = 'front/photos/subcategories/' . $filename;
         }
 
         $subcategory = $this->subcategoryService->createSubcategory($data);
@@ -86,8 +86,8 @@ class SubcategoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/subcategories'), $filename);
-            $data['image'] = 'photoe/subcategories/' . $filename;
+            $file->move(public_path('front/photos/subcategories'), $filename);
+            $data['image'] = 'front/photos/subcategories/' . $filename;
         }
 
         $subcategory = $this->subcategoryService->updateSubcategory($id, $data);

@@ -582,7 +582,7 @@
                         </td>
                         <td>
                            <button class="btn-action" title="Edit" onclick="openEditProductModal({{ json_encode($prod) }})"><i class="fas fa-edit"></i></button>
-                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/api/v1/admin/products/{{ $prod->id }}')"><i class="fas fa-trash-alt"></i></button>
+                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/admin/products/{{ $prod->id }}')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                      </tr>
                   @empty
@@ -623,7 +623,7 @@
                         <td>{{ $cat->created_at->format('M d, Y') }}</td>
                         <td>
                            <button class="btn-action" title="Edit" onclick="openEditCategoryModal({{ json_encode($cat) }})"><i class="fas fa-edit"></i></button>
-                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/api/v1/admin/categories/{{ $cat->id }}')"><i class="fas fa-trash-alt"></i></button>
+                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/admin/categories/{{ $cat->id }}')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                      </tr>
                   @empty
@@ -664,7 +664,7 @@
                         <td>{{ $sub->products_count }} products</td>
                         <td>
                            <button class="btn-action" title="Edit" onclick="openEditSubcategoryModal({{ json_encode($sub) }})"><i class="fas fa-edit"></i></button>
-                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/api/v1/admin/subcategories/{{ $sub->id }}')"><i class="fas fa-trash-alt"></i></button>
+                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/admin/subcategories/{{ $sub->id }}')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                      </tr>
                   @empty
@@ -699,7 +699,7 @@
                         <td><span class="fw-bold text-success">+EGP {{ number_format($addon->price_adjustment, 2) }}</span></td>
                         <td>
                            <button class="btn-action" title="Edit" onclick="openEditAddonModal({{ json_encode($addon) }})"><i class="fas fa-edit"></i></button>
-                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/api/v1/admin/add-ons/{{ $addon->id }}')"><i class="fas fa-trash-alt"></i></button>
+                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/admin/add-ons/{{ $addon->id }}')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                      </tr>
                   @empty
@@ -736,7 +736,7 @@
                         <td><i class="fas fa-clock me-1 text-muted"></i>{{ $zone->estimated_time ?? '20-30 mins' }}</td>
                         <td>
                            <button class="btn-action" title="Edit" onclick="openEditDeliveryModal({{ json_encode($zone) }})"><i class="fas fa-edit"></i></button>
-                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/api/v1/admin/delivery-zones/{{ $zone->id }}')"><i class="fas fa-trash-alt"></i></button>
+                           <button class="btn-action delete" title="Delete" onclick="deleteItem('/admin/delivery-zones/{{ $zone->id }}')"><i class="fas fa-trash-alt"></i></button>
                         </td>
                      </tr>
                   @empty
@@ -801,7 +801,7 @@
                <h5 class="modal-title fw-bold">Add New Category</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form onsubmit="submitApiForm(event, '/api/v1/admin/categories', 'POST')">
+            <form onsubmit="submitApiForm(event, '/admin/categories', 'POST')" enctype="multipart/form-data">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Category Name</label>
@@ -828,7 +828,7 @@
                <h5 class="modal-title fw-bold">Add New Subcategory</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form onsubmit="submitApiForm(event, '/api/v1/admin/subcategories', 'POST')" enctype="multipart/form-data">
+            <form onsubmit="submitApiForm(event, '/admin/subcategories', 'POST')" enctype="multipart/form-data">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Parent Category</label>
@@ -863,7 +863,7 @@
                <h5 class="modal-title fw-bold">Add New Product</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form onsubmit="submitApiForm(event, '/api/v1/admin/products', 'POST')">
+            <form onsubmit="submitApiForm(event, '/admin/products', 'POST')" enctype="multipart/form-data">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Subcategory</label>
@@ -915,7 +915,7 @@
                <h5 class="modal-title fw-bold">Edit Category</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="editCategoryForm" onsubmit="submitApiForm(event, this.action, 'PUT')">
+            <form id="editCategoryForm" onsubmit="submitApiForm(event, this.action, 'PUT')" enctype="multipart/form-data">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Category Name</label>
@@ -978,7 +978,7 @@
                <h5 class="modal-title fw-bold">Edit Product</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="editProductForm" onsubmit="submitApiForm(event, this.action, 'PUT')">
+            <form id="editProductForm" onsubmit="submitApiForm(event, this.action, 'PUT')" enctype="multipart/form-data">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Subcategory</label>
@@ -1030,7 +1030,7 @@
                <h5 class="modal-title fw-bold">Add New Add-On</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form onsubmit="submitApiForm(event, '/api/v1/admin/add-ons', 'POST')">
+            <form onsubmit="submitApiForm(event, '/admin/add-ons', 'POST')">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Add-On Name</label>
@@ -1057,7 +1057,7 @@
                <h5 class="modal-title fw-bold">Add Delivery Zone</h5>
                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form onsubmit="submitApiForm(event, '/api/v1/admin/delivery-zones', 'POST')">
+            <form onsubmit="submitApiForm(event, '/admin/delivery-zones', 'POST')">
                <div class="modal-body">
                   <div class="mb-3">
                      <label class="form-label fw-bold">Zone Name</label>
@@ -1150,12 +1150,18 @@
       </div>
    </div>
    <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
+   <script src="{{ asset('front/js/sweetalert2.all.min.js') }}"></script>
    <script>
       function switchTab(tabId, btn) {
          document.querySelectorAll('.tab-content-panel').forEach(el => el.classList.remove('active'));
          document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
          
-         document.getElementById('tab-' + tabId).classList.add('active');
+         const panel = document.getElementById('tab-' + tabId);
+         if (panel) panel.classList.add('active');
+         
+         if(!btn) {
+            btn = document.querySelector(`.admin-nav-item[onclick*="'${tabId}'"]`);
+         }
          if(btn) btn.classList.add('active');
          
          const titles = {
@@ -1168,6 +1174,45 @@
             orders: 'Orders Management'
          };
          document.getElementById('pageTitle').textContent = titles[tabId] || 'Admin Dashboard';
+
+         localStorage.setItem('activeAdminTab', tabId);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+         const savedTab = localStorage.getItem('activeAdminTab');
+         if (savedTab) {
+            switchTab(savedTab, null);
+         }
+      });
+
+      function closeAllModals() {
+         document.querySelectorAll('.modal.show').forEach(m => {
+            const modal = bootstrap.Modal.getInstance(m);
+            if (modal) modal.hide();
+         });
+         setTimeout(() => {
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style = '';
+         }, 300);
+      }
+
+      async function reloadPageContent() {
+         try {
+            const res = await fetch(window.location.href);
+            const html = await res.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            document.querySelectorAll('.tab-content-panel').forEach(panel => {
+               const newPanel = doc.getElementById(panel.id);
+               if (newPanel) {
+                  panel.innerHTML = newPanel.innerHTML;
+               }
+            });
+         } catch(e) {
+            console.error(e);
+         }
       }
 
       async function submitApiForm(e, url, method) {
@@ -1191,28 +1236,28 @@
             });
 
             if (res.ok) {
-               alert('Action completed successfully!');
-               window.location.reload();
+               closeAllModals();
+               reloadPageContent();
+               Swal.fire({ title: 'Success!', text: 'Action completed successfully!', icon: 'success', confirmButtonColor: '#9C7A5B', timer: 1500, showConfirmButton: false });
             } else {
                const err = await res.json();
-               alert('Error: ' + (err.message || JSON.stringify(err.errors) || 'Validation error'));
+               Swal.fire({ title: 'Error!', text: err.message || JSON.stringify(err.errors) || 'Validation error', icon: 'error', confirmButtonColor: '#9C7A5B' });
             }
          } catch (error) {
-            alert('Server error. Reloading page...');
-            window.location.reload();
+            Swal.fire({ title: 'Error!', text: 'Server error.', icon: 'error', confirmButtonColor: '#9C7A5B' });
          }
       }
 
       function openEditCategoryModal(cat) {
          document.getElementById('editCategoryName').value = cat.name;
-         document.getElementById('editCategoryForm').action = '/api/v1/admin/categories/' + cat.id;
+         document.getElementById('editCategoryForm').action = '/admin/categories/' + cat.id;
          new bootstrap.Modal(document.getElementById('editCategoryModal')).show();
       }
 
       function openEditSubcategoryModal(sub) {
          document.getElementById('editSubcategoryName').value = sub.name;
          document.getElementById('editSubcategoryCategoryId').value = sub.category_id;
-         document.getElementById('editSubcategoryForm').action = '/api/v1/admin/subcategories/' + sub.id;
+         document.getElementById('editSubcategoryForm').action = '/admin/subcategories/' + sub.id;
          new bootstrap.Modal(document.getElementById('editSubcategoryModal')).show();
       }
 
@@ -1223,14 +1268,14 @@
          document.getElementById('editProductStock').value = prod.stock;
          document.getElementById('editProductDesc').value = prod.description || '';
          document.getElementById('editProductFeatured').checked = prod.is_featured;
-         document.getElementById('editProductForm').action = '/api/v1/admin/products/' + prod.id;
+         document.getElementById('editProductForm').action = '/admin/products/' + prod.id;
          new bootstrap.Modal(document.getElementById('editProductModal')).show();
       }
 
       function openEditAddonModal(addon) {
          document.getElementById('editAddonName').value = addon.name;
          document.getElementById('editAddonPrice').value = addon.price_adjustment;
-         document.getElementById('editAddonForm').action = '/api/v1/admin/add-ons/' + addon.id;
+         document.getElementById('editAddonForm').action = '/admin/add-ons/' + addon.id;
          new bootstrap.Modal(document.getElementById('editAddonModal')).show();
       }
 
@@ -1239,14 +1284,14 @@
          document.getElementById('editDeliveryZoneFee').value = zone.delivery_fee;
          document.getElementById('editDeliveryZoneMinOrder').value = zone.minimum_order_value || '';
          document.getElementById('editDeliveryZoneTime').value = zone.estimated_time || '';
-         document.getElementById('editDeliveryZoneForm').action = '/api/v1/admin/delivery-zones/' + zone.id;
+         document.getElementById('editDeliveryZoneForm').action = '/admin/delivery-zones/' + zone.id;
          new bootstrap.Modal(document.getElementById('editDeliveryZoneModal')).show();
       }
 
 
       async function updateOrderStatus(orderId, status) {
          try {
-            const res = await fetch('/api/v1/admin/orders/' + orderId + '/status', {
+            const res = await fetch('/admin/orders/' + orderId + '/status', {
                method: 'PUT',
                headers: {
                   'Content-Type': 'application/json',
@@ -1257,34 +1302,46 @@
             });
 
             if (res.ok) {
-               alert('Order #' + orderId.substring(0, 8) + ' status updated to ' + status);
+               Swal.fire({ title: 'Updated!', text: 'Order #' + orderId.substring(0, 8) + ' status updated to ' + status, icon: 'success', confirmButtonColor: '#9C7A5B' });
             } else {
-               alert('Failed to update status.');
+               Swal.fire({ title: 'Error!', text: 'Failed to update status.', icon: 'error', confirmButtonColor: '#9C7A5B' });
             }
          } catch (e) {
             console.error(e);
          }
       }
 
-      async function deleteItem(url) {
-         if(!confirm('Are you sure you want to delete this item?')) return;
-         try {
-            const res = await fetch(url, {
-               method: 'DELETE',
-               headers: {
-                  'Accept': 'application/json',
-                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      function deleteItem(url) {
+         Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#9C7A5B',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+         }).then(async (result) => {
+            if (result.isConfirmed) {
+               try {
+                  const res = await fetch(url, {
+                     method: 'DELETE',
+                     headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                     }
+                  });
+                  if (res.ok) {
+                     reloadPageContent();
+                     Swal.fire({ title: 'Deleted!', text: 'Item has been deleted.', icon: 'success', confirmButtonColor: '#9C7A5B', timer: 1500, showConfirmButton: false });
+                  } else {
+                     Swal.fire({ title: 'Error!', text: 'Failed to delete item.', icon: 'error', confirmButtonColor: '#9C7A5B' });
+                  }
+               } catch(e) {
+                  console.error(e);
+                  Swal.fire({ title: 'Error!', text: 'Server error.', icon: 'error', confirmButtonColor: '#9C7A5B' });
                }
-            });
-            if (res.ok) {
-               alert('Deleted successfully!');
-               window.location.reload();
-            } else {
-               alert('Failed to delete.');
             }
-         } catch(e) {
-            console.error(e);
-         }
+         });
       }
    </script>
 </body>

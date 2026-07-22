@@ -49,8 +49,8 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/products'), $filename);
-            $data['image'] = 'photoe/products/' . $filename;
+            $file->move(public_path('front/photos/products'), $filename);
+            $data['image'] = 'front/photos/products/' . $filename;
         }
 
         $product = $this->productService->createProduct($data);
@@ -101,8 +101,8 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('photoe/products'), $filename);
-            $data['image'] = 'photoe/products/' . $filename;
+            $file->move(public_path('front/photos/products'), $filename);
+            $data['image'] = 'front/photos/products/' . $filename;
         }
 
         $product = $this->productService->updateProduct($id, $data);
