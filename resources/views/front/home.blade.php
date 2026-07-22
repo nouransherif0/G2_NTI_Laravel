@@ -168,7 +168,7 @@
                      data-img="{{ $product->image ? asset($product->image) : asset('front/photos/coffee/esspresso.jpg') }}"
                      data-title="{{ $product->name }}"
                      data-cat="{{ $product->subcategory->category->name ?? 'Uncategorized' }}"
-                     data-price="${{ number_format($product->price, 2) }}" data-old="${{ number_format($product->price + 1, 2) }}"
+                     data-price="EGP {{ number_format($product->price, 2) }}" data-old="EGP {{ number_format($product->price + 1, 2) }}"
                      data-rating="4.9" data-reviews="128"
                      data-cal="180" data-time="5"
                      data-desc="{{ $product->description }}"
@@ -194,7 +194,7 @@
                         <div class="mdesc">{{ Str::limit($product->description, 50) }}</div>
                         <div class="mfoot">
                            <div>
-                              <div class="mprice">${{ number_format($product->price, 2) }} <small>${{ number_format($product->price + 1, 2) }}</small></div>
+                              <div class="mprice">EGP {{ number_format($product->price, 2) }} <small>EGP {{ number_format($product->price + 1, 2) }}</small></div>
                               <div class="mstars"><i class="fas fa-star"></i> <span style="color:#bbb;font-size:.7rem;">(128)</span></div>
                            </div>
                            <button class="madd" title="View Details"><i class="fas fa-plus"></i></button>

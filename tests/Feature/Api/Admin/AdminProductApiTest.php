@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api\Admin;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Subcategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,12 +20,16 @@ class AdminProductApiTest extends TestCase
         $user = User::factory()->create(['role' => 'admin']);
         $subcategory = Subcategory::factory()->create();
 
+        Storage::fake('public');
+        $file = \Illuminate\Http\UploadedFile::fake()->image('product.jpg');
+
         $response = $this->actingAs($user)->postJson('/admin/products', [
             'subcategory_id' => $subcategory->id,
             'name' => 'New Product',
             'description' => 'A nice product',
             'price' => 100.50,
             'stock' => 50,
+            'image' => $file,
         ]);
 
         $response->assertStatus(201)

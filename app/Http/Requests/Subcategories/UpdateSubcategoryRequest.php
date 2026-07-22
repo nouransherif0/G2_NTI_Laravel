@@ -16,6 +16,7 @@ class UpdateSubcategoryRequest extends FormRequest
         return [
             'category_id' => 'sometimes|required|integer|exists:categories,id',
             'name' => 'sometimes|required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 

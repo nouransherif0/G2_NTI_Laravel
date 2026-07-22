@@ -10,7 +10,7 @@ class AddOnFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'price_adjustment' => $this->faker->randomFloat(2, 5, 50),
+            'price_adjustment' => $this->faker->randomFloat(2, 20, 100),
         ];
     }
 }

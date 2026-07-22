@@ -14,7 +14,7 @@ class OrderItemFactory extends Factory
             'order_id' => Order::factory(),
             'product_id' => Product::factory(),
             'quantity' => $this->faker->numberBetween(1, 5),
-            'price' => $this->faker->randomFloat(2, 10, 500),
+            'price' => $this->faker->randomFloat(2, 90, 200),
         ];
     }
 }
