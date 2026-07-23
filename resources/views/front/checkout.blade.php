@@ -255,6 +255,18 @@
                         </div>
                         <input type="radio" name="payment_method" value="card">
                     </label>
+
+                    <div id="savedCardsContainer" style="display: none; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 15px; margin-top: -10px; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;">
+                        <div id="savedCardsLoader" class="text-center py-2" style="display: none;">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading cards...
+                        </div>
+                        <div id="savedCardsList">
+                            <!-- Saved cards will be injected here -->
+                        </div>
+                        <button class="btn btn-sm btn-outline-dark mt-2" onclick="openAddCardModal()">
+                            <i class="fas fa-plus"></i> Add New Card
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -368,6 +380,64 @@
     </div>
 </div>
 
+<!-- Add New Card Modal -->
+<div class="modal fade" id="newCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title" style="color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.5rem;">Add New Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <form id="newCardForm" novalidate>
+                    <div id="cardFormError" class="alert alert-danger" style="display: none;"></div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Card Type *</label>
+                        <select class="form-select" id="cardType" required>
+                            <option value="">Select card type...</option>
+                            <option value="Visa">Visa</option>
+                            <option value="MasterCard">MasterCard</option>
+                            <option value="Amex">American Express</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Name on Card *</label>
+                        <input type="text" class="form-control" id="cardName" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Card Number *</label>
+                        <input type="text" class="form-control" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">Expiry Date *</label>
+                            <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted small fw-bold">CVV *</label>
+                            <input type="password" class="form-control" id="cardCvv" placeholder="***" maxlength="4" required>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-dark w-100 mt-2" id="saveCardBtn" style="background-color: var(--primary); border: none;">
+                        Save Card
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Order Success Modal -->
 <div class="modal fade" id="orderSuccessModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -406,8 +476,10 @@
 
 <script>
 let addresses = [];
+let savedCards = [];
 let cartData = null;
 let selectedAddressId = null;
+let selectedCardId = null;
 let currentSubtotal = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -420,6 +492,13 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', function() {
             document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
             this.closest('.payment-option').classList.add('selected');
+            
+            if(this.value === 'card') {
+                document.getElementById('savedCardsContainer').style.display = 'block';
+                loadSavedCards();
+            } else {
+                document.getElementById('savedCardsContainer').style.display = 'none';
+            }
         });
     });
 });
@@ -752,19 +831,31 @@ document.getElementById('placeOrderBtn').addEventListener('click', function() {
     }
     
     const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+    if(paymentMethod === 'card' && !selectedCardId) {
+        const err = document.getElementById('orderError');
+        err.style.display = 'block';
+        err.textContent = 'Please select a saved card to proceed with card payment.';
+        return;
+    }
     
     const btn = this;
     btn.disabled = true;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     document.getElementById('orderError').style.display = 'none';
     
+    let payload = {
+        address_id: selectedAddressId.toString(),
+        payment_method: paymentMethod
+    };
+    
+    if(paymentMethod === 'card') {
+        payload.saved_card_id = selectedCardId;
+    }
+    
     fetch('/api/v1/orders', {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify({
-            address_id: selectedAddressId.toString(),
-            payment_method: paymentMethod
-        })
+        body: JSON.stringify(payload)
     })
     .then(res => res.json().then(data => ({status: res.status, body: data})))
     .then(res => {
@@ -789,6 +880,150 @@ document.getElementById('placeOrderBtn').addEventListener('click', function() {
         btn.innerHTML = 'Place Order <i class="fas fa-arrow-right ms-2"></i>';
     });
 });
+
+// Saved Cards logic
+function loadSavedCards() {
+    document.getElementById('savedCardsLoader').style.display = 'block';
+    fetch('/api/v1/saved-cards', { headers: getHeaders() })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('savedCardsLoader').style.display = 'none';
+        savedCards = data.data || [];
+        renderSavedCards();
+    })
+    .catch(err => {
+        document.getElementById('savedCardsLoader').style.display = 'none';
+        console.error(err);
+    });
+}
+
+function renderSavedCards() {
+    const list = document.getElementById('savedCardsList');
+    list.innerHTML = '';
+    
+    if (savedCards.length === 0) {
+        list.innerHTML = '<div class="text-muted small mb-2">No saved cards found. Please add a new card.</div>';
+        return;
+    }
+    
+    savedCards.forEach((card, index) => {
+        if (selectedCardId === null && index === 0) {
+            selectedCardId = card.id;
+        }
+        
+        const isSelected = selectedCardId === card.id;
+        
+        // Mask card number
+        const masked = card.card_number.replace(/\d(?=\d{4})/g, "*");
+        
+        let iconClass = 'fa-credit-card';
+        if(card.card_type.toLowerCase() === 'visa') iconClass = 'fa-cc-visa';
+        if(card.card_type.toLowerCase() === 'mastercard') iconClass = 'fa-cc-mastercard';
+        if(card.card_type.toLowerCase() === 'amex') iconClass = 'fa-cc-amex';
+        
+        const html = `
+            <div class="address-card ${isSelected ? 'selected' : ''}" onclick="selectCard(${card.id})" style="padding: 10px 15px; margin-bottom: 10px;">
+                <div class="d-flex align-items-center">
+                    <i class="fab ${iconClass} fs-3 me-3" style="color: var(--primary);"></i>
+                    <div>
+                        <div class="fw-bold">${card.card_type} ending in ${card.card_number.slice(-4)}</div>
+                        <div class="small text-muted">Expires ${card.expiry_date}</div>
+                    </div>
+                </div>
+                <input type="radio" name="saved_card_id" value="${card.id}" ${isSelected ? 'checked' : ''} style="display:none;">
+            </div>
+        `;
+        list.insertAdjacentHTML('beforeend', html);
+    });
+}
+
+function selectCard(id) {
+    selectedCardId = id;
+    renderSavedCards();
+}
+
+function openAddCardModal() {
+    document.getElementById('newCardForm').reset();
+    document.querySelectorAll('#newCardForm .is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    document.getElementById('cardFormError').style.display = 'none';
+    
+    var modal = new bootstrap.Modal(document.getElementById('newCardModal'));
+    modal.show();
+}
+
+document.getElementById('newCardForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('saveCardBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    
+    const payload = {
+        card_type: document.getElementById('cardType').value,
+        card_name: document.getElementById('cardName').value,
+        card_number: document.getElementById('cardNumber').value,
+        expiry_date: document.getElementById('cardExpiry').value,
+        cvv: document.getElementById('cardCvv').value
+    };
+    
+    document.querySelectorAll('#newCardForm .is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    document.getElementById('cardFormError').style.display = 'none';
+    
+    fetch('/api/v1/saved-cards', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json().then(data => ({status: res.status, body: data})))
+    .then(res => {
+        btn.disabled = false;
+        btn.innerHTML = 'Save Card';
+        
+        if (res.status === 201) {
+            var modalEl = document.getElementById('newCardModal');
+            var modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+            
+            selectedCardId = res.body.data.id;
+            loadSavedCards(); // Reload cards
+        } else {
+            if (res.body.errors) {
+                const fieldMap = {
+                    'card_type': 'cardType',
+                    'card_name': 'cardName',
+                    'card_number': 'cardNumber',
+                    'expiry_date': 'cardExpiry',
+                    'cvv': 'cardCvv'
+                };
+                
+                let unmappedErrors = [];
+                for (const [field, messages] of Object.entries(res.body.errors)) {
+                    const inputId = fieldMap[field];
+                    const inputEl = document.getElementById(inputId);
+                    if (inputEl) {
+                        inputEl.classList.add('is-invalid');
+                        inputEl.nextElementSibling.textContent = messages[0];
+                    } else {
+                        unmappedErrors.push(messages[0]);
+                    }
+                }
+                
+                if (unmappedErrors.length > 0) {
+                    document.getElementById('cardFormError').style.display = 'block';
+                    document.getElementById('cardFormError').innerHTML = unmappedErrors.join('<br>');
+                }
+            } else {
+                document.getElementById('cardFormError').style.display = 'block';
+                document.getElementById('cardFormError').textContent = res.body.message || 'Validation error occurred.';
+            }
+        }
+    })
+    .catch(err => {
+        btn.disabled = false;
+        btn.innerHTML = 'Save Card';
+        console.error(err);
+    });
+});
+
 
 </script>
 @endsection

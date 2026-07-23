@@ -25,7 +25,9 @@ class HomeController extends Controller
         }
         
         $products = $query->simplePaginate(12)->withQueryString();
+        
+        $addOns = \App\Models\AddOn::all();
 
-        return view('front.home', compact('categories', 'products'));
+        return view('front.home', compact('categories', 'products', 'addOns'));
     }
 }

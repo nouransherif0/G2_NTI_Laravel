@@ -23,6 +23,7 @@ class CheckoutRequest extends FormRequest
                 }),
             ],
             'payment_method' => ['required', 'string', 'in:cash,card'],
+            'saved_card_id' => ['required_if:payment_method,card', 'integer', 'exists:saved_cards,id'],
         ];
     }
     
@@ -32,6 +33,7 @@ class CheckoutRequest extends FormRequest
             'address_id.required' => 'Please select a delivery address.',
             'address_id.exists' => 'The selected address is invalid or does not belong to you.',
             'payment_method.in' => 'The selected payment method is invalid.',
+            'saved_card_id.required_if' => 'Please select a saved card to proceed with card payment.',
         ];
     }
 }

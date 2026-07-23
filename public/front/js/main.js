@@ -234,6 +234,7 @@ document.querySelectorAll('.catcard').forEach(function(card) {
 
 var menuPop = document.getElementById('menuPop');
 var mpQty = 1;
+var mpBasePrice = 0;
 
 function openMenuPop(card) {
     var img = card.getAttribute('data-img');
@@ -263,6 +264,9 @@ function openMenuPop(card) {
 
     document.getElementById('mpDesc').textContent = desc;
 
+    mpBasePrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+    menuPop.setAttribute('data-old-price', old || '');
+
     document.getElementById('mpPrice').innerHTML =
         price + (old ? '<small style="color:#ccc;text-decoration:line-through;margin-left:8px;font-size:1rem;">' + old + '</small>' : '');
 
@@ -280,6 +284,11 @@ function openMenuPop(card) {
     document.getElementById('mpQnum').textContent = 1;
     document.getElementById('mpAddCart').innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Cart';
     document.getElementById('mpAddCart').style.background = '';
+    
+    // Reset Add-ons
+    document.querySelectorAll('.mp-addon-checkbox').forEach(function(cb) {
+        cb.checked = false;
+    });
 
     menuPop.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -322,12 +331,34 @@ function closeMenuPop() {
     document.body.style.overflow = '';
 }
 
+function updateMpPriceDisplay() {
+    var addOnTotal = 0;
+    document.querySelectorAll('.mp-addon-checkbox:checked').forEach(function(cb) {
+        addOnTotal += parseFloat(cb.getAttribute('data-addon-price')) || 0;
+    });
+    var total = (mpBasePrice + addOnTotal) * mpQty;
+    
+    var oldStr = menuPop.getAttribute('data-old-price');
+    var oldHTML = oldStr ? '<small style="color:#ccc;text-decoration:line-through;margin-left:8px;font-size:1rem;">' + oldStr + '</small>' : '';
+    
+    document.getElementById('mpPrice').innerHTML = 'EGP ' + total.toFixed(2) + oldHTML;
+}
+
+// Add-on checkbox change
+document.querySelectorAll('.mp-addon-checkbox').forEach(function(cb) {
+    cb.addEventListener('change', updateMpPriceDisplay);
+});
+
 // Qty +/-
 document.getElementById('mpPlus').addEventListener('click', function() {
     document.getElementById('mpQnum').textContent = ++mpQty;
+    updateMpPriceDisplay();
 });
 document.getElementById('mpMinus').addEventListener('click', function() {
-    if (mpQty > 1) document.getElementById('mpQnum').textContent = --mpQty;
+    if (mpQty > 1) {
+        document.getElementById('mpQnum').textContent = --mpQty;
+        updateMpPriceDisplay();
+    }
 });
 
 // Add to cart button
@@ -345,6 +376,15 @@ document.getElementById('mpAddCart').addEventListener('click', function() {
         return;
     }
 
+    var selectedAddOns = [];
+    document.querySelectorAll('.mp-addon-checkbox:checked').forEach(function(cb) {
+        selectedAddOns.push({
+            id: cb.getAttribute('data-addon-id'),
+            name: cb.getAttribute('data-addon-name'),
+            price_adjustment: parseFloat(cb.getAttribute('data-addon-price'))
+        });
+    });
+
     fetch('/api/v1/cart/items', {
         method: 'POST',
         headers: {
@@ -355,7 +395,8 @@ document.getElementById('mpAddCart').addEventListener('click', function() {
         },
         body: JSON.stringify({
             product_id: parseInt(productId),
-            quantity: mpQty
+            quantity: mpQty,
+            add_ons: selectedAddOns
         })
     })
     .then(response => {
@@ -716,10 +757,32 @@ document.addEventListener("DOMContentLoaded", function() {
             addMessage(text, true);
             chatInput.value = "";
             
-            // Fake bot reply
-            setTimeout(() => {
-                addMessage("Thank you for your message! An agent will be with you shortly to assist with: " + text, false);
-            }, 1000);
+            // Show typing indicator
+            const typingId = 'typing-' + Date.now();
+            const typingDiv = document.createElement("div");
+            typingDiv.className = "chat-msg chat-msg-bot text-muted";
+            typingDiv.id = typingId;
+            typingDiv.innerHTML = '<i class="fas fa-ellipsis-h fa-fade"></i>';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            fetch('/api/v1/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ message: text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById(typingId).remove();
+                addMessage(data.response, false);
+            })
+            .catch(err => {
+                document.getElementById(typingId).remove();
+                addMessage("Sorry, I'm having trouble connecting right now.", false);
+            });
         }
     }
 
@@ -734,12 +797,8 @@ document.addEventListener("DOMContentLoaded", function() {
         chatChips.forEach(chip => {
             chip.addEventListener("click", function() {
                 const msg = this.getAttribute("data-msg");
-                addMessage(msg, true);
-                
-                // Fake bot reply
-                setTimeout(() => {
-                    addMessage("I can definitely help you with that! Processing your request...", false);
-                }, 1000);
+                chatInput.value = msg;
+                handleSend();
             });
         });
     }

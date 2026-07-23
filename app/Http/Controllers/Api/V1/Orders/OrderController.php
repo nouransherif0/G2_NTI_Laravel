@@ -91,4 +91,45 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
+
+    public function reorder(Request $request, $id)
+    {
+        $order = \App\Models\Order::with('orderItems.orderItemAddons')->where('id', $id)->where('user_id', $request->user()->id)->first();
+        
+        if (!$order) {
+            return response()->json(['message' => 'Order not found.'], 404);
+        }
+
+        $cartService = app(\App\Services\Carts\CartService::class);
+        $cart = $cartService->getOrCreateCart($request->user()->id);
+
+        foreach ($order->orderItems as $item) {
+            // Re-add to cart
+            $cartItem = \App\Models\CartItem::create([
+                'cart_id' => $cart->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+            ]);
+
+            // Try to re-add addons
+            $addons = [];
+            foreach ($item->orderItemAddons as $addon) {
+                if ($addon->addon_id) {
+                    $addons[] = [
+                        'id' => $addon->addon_id,
+                        'price_adjustment' => $addon->price_adjustment
+                    ];
+                }
+            }
+            if (count($addons) > 0) {
+                $cartItem->add_ons = $addons;
+                $cartItem->save();
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Items from order #'.$order->id.' have been added to your cart.'
+        ]);
+    }
 }

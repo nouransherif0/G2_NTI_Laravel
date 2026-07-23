@@ -259,6 +259,27 @@
                   <span style="font-size:.82rem;color:#aaa;margin-left:9px;">portion</span>
                </div>
                <div class="mptags" id="mpTags"></div>
+               <div class="mpaddons" id="mpAddOns" style="margin-top: 15px; margin-bottom: 15px;">
+                  <h6 style="margin-bottom:10px;font-weight:600;font-size:.9rem;">Extras & Add-Ons</h6>
+                  @if(isset($addOns) && $addOns->count() > 0)
+                      @foreach($addOns as $addon)
+                      <div class="form-check" style="font-size: 0.85rem; margin-bottom: 5px;">
+                          <input class="form-check-input mp-addon-checkbox" type="checkbox" 
+                                 value="{{ $addon->id }}" 
+                                 id="addon-{{ $addon->id }}"
+                                 data-addon-id="{{ $addon->id }}"
+                                 data-addon-name="{{ $addon->name }}"
+                                 data-addon-price="{{ $addon->price_adjustment }}">
+                          <label class="form-check-label d-flex justify-content-between w-100" for="addon-{{ $addon->id }}" style="cursor: pointer;">
+                              <span style="text-transform: capitalize;">{{ $addon->name }}</span>
+                              <span style="color: var(--secondary); font-weight: 600;">+EGP {{ number_format($addon->price_adjustment, 2) }}</span>
+                          </label>
+                      </div>
+                      @endforeach
+                  @else
+                      <p style="font-size: 0.8rem; color: #888;">No extras available.</p>
+                  @endif
+               </div>
                <button class="mpaddcart" id="mpAddCart"><i class="fas fa-shopping-cart"></i>Add to Cart</button>
             </div>
          </div>

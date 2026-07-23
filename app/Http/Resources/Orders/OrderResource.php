@@ -17,7 +17,7 @@ class OrderResource extends JsonResource
             'total_price' => number_format($this->total_price, 2) . ' EGP',
             'delivery_fee' => number_format($this->delivery_fee, 2) . ' EGP',
             'payment_method' => $this->payment_method,
-            'address' => new AddressResource($this->whenLoaded('address')),
+            'address' => $this->relationLoaded('address') && $this->address ? new AddressResource($this->address) : null,
             'items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

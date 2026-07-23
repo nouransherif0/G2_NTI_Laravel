@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Orders\OrderController;
+use App\Http\Controllers\Api\V1\SavedCardController;
+use App\Http\Controllers\Api\V1\ChatController;
+use App\Http\Controllers\Api\V1\RewardController;
 use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\Carts\CartController;
 use App\Http\Controllers\Api\V1\Addresses\AddressController;
@@ -32,6 +35,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/add-ons', [AddOnController::class, 'index']);
     Route::get('/delivery-zones', [DeliveryZoneController::class, 'index']);
+    Route::post('/chat', [ChatController::class, 'respond']);
 
     // Protected User Routes (Require Authentication)
     Route::middleware('auth:sanctum,web')->group(function () {
@@ -39,6 +43,15 @@ Route::prefix('v1')->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::post('/orders', [OrderController::class, 'store']);
         Route::get('/orders/{id}', [OrderController::class, 'show']);
+        Route::post('/orders/{id}/reorder', [OrderController::class, 'reorder']);
+
+        // Rewards
+        Route::get('/rewards/points', [RewardController::class, 'getPoints']);
+        Route::post('/rewards/redeem', [RewardController::class, 'redeem']);
+
+        // Saved Cards
+        Route::get('/saved-cards', [SavedCardController::class, 'index']);
+        Route::post('/saved-cards', [SavedCardController::class, 'store']);
 
         // Carts
         Route::get('/cart', [CartController::class, 'show']);

@@ -67,6 +67,14 @@ class OrderService
             }
 
             $cart->cartItems()->delete();
+            
+            // Add reward points (1 point per 10 currency units spent)
+            $user = \App\Models\User::find($userId);
+            if ($user) {
+                $pointsEarned = (int) ($totalPrice / 10);
+                $user->reward_points += max(1, $pointsEarned);
+                $user->save();
+            }
 
             return $order->load(['orderItems.product', 'address.deliveryZone']);
         });

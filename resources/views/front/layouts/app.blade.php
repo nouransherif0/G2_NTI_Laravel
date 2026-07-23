@@ -438,57 +438,8 @@
                <button class="cm-close" data-cm-close><i class="fas fa-times"></i></button>
             </div>
             <div class="cm-body">
-               <div class="order-tracker">
-                  <div class="d-flex justify-content-between align-items-center mb-2">
-                     <div>
-                        <span class="order-badge brewing me-2">Order #SNUG-8921</span>
-                        <small class="text-muted">Placed 12 mins ago</small>
-                     </div>
-                     <span class="fw-bold" style="color:var(--primary);">$14.50</span>
-                  </div>
-                  <div class="tracker-steps">
-                     <div class="tracker-progress"></div>
-                     <div class="tracker-step done">
-                        <div class="tracker-icon"><i class="fas fa-check"></i></div>
-                        <div class="tracker-label">Order Placed</div>
-                     </div>
-                     <div class="tracker-step done">
-                        <div class="tracker-icon"><i class="fas fa-mug-hot"></i></div>
-                        <div class="tracker-label">Brewing</div>
-                     </div>
-                     <div class="tracker-step active">
-                        <div class="tracker-icon"><i class="fas fa-motorcycle"></i></div>
-                        <div class="tracker-label">On The Way</div>
-                     </div>
-                     <div class="tracker-step">
-                        <div class="tracker-icon"><i class="fas fa-home"></i></div>
-                        <div class="tracker-label">Delivered</div>
-                     </div>
-                  </div>
-               </div>
-
-               <h6 class="fw-bold mb-3" style="color:var(--dark);"><i class="fas fa-history me-2 text-primary"></i>Past Orders</h6>
-               <div class="order-card">
-                  <div class="order-details">
-                     <h6>Signature Pink Matcha & Caramel Latte</h6>
-                     <small class="text-muted">Order #SNUG-7430 • July 20, 2026</small>
-                     <div class="mt-1"><span class="order-badge delivered">Delivered</span></div>
-                  </div>
-                  <div class="text-end">
-                     <div class="fw-bold mb-2">$13.60</div>
-                     <button class="btn btn-sm btn-outline-dark rounded-pill reorder-btn"><i class="fas fa-redo me-1"></i>Reorder</button>
-                  </div>
-               </div>
-               <div class="order-card">
-                  <div class="order-details">
-                     <h6>Berry Smoothie & Fresh Croissant</h6>
-                     <small class="text-muted">Order #SNUG-6129 • July 15, 2026</small>
-                     <div class="mt-1"><span class="order-badge delivered">Delivered</span></div>
-                  </div>
-                  <div class="text-end">
-                     <div class="fw-bold mb-2">$11.20</div>
-                     <button class="btn btn-sm btn-outline-dark rounded-pill reorder-btn"><i class="fas fa-redo me-1"></i>Reorder</button>
-                  </div>
+               <div id="myOrdersContainer">
+                  <div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div></div>
                </div>
             </div>
          </div>
@@ -556,41 +507,33 @@
                <div class="rewards-banner">
                   <div class="d-flex justify-content-between align-items-center">
                      <div>
-                        <span class="badge bg-warning text-dark uppercase fw-bold mb-2">Gold Member</span>
+                        <span class="badge bg-warning text-dark uppercase fw-bold mb-2">Rewards Member</span>
                         <h5 class="mb-0 text-white">{{ Auth::check() ? Auth::user()->name : "Guest" }}</h5>
                      </div>
                      <div class="text-end">
-                        <div class="rewards-pts" id="rewardPtsDisplay">340</div>
+                        <div class="rewards-pts" id="rewardPtsDisplay">0</div>
                         <small style="color:var(--secondary);">Available Points</small>
                      </div>
                   </div>
                   <div class="rewards-bar-wrap">
-                     <div class="rewards-bar"></div>
+                     <div class="rewards-bar" style="width: 100%;"></div>
                   </div>
-                  <small class="text-white-50">160 points away from Platinum Tier (Free Birthday Drink + 15% off)</small>
+                  <small class="text-white-50">Earn 1 point for every 10 EGP spent!</small>
                </div>
 
                <h6 class="fw-bold mb-3"><i class="fas fa-ticket-alt me-2 text-warning"></i>Redeemable Vouchers</h6>
+               <div id="redeemSuccessMsg" class="alert alert-success" style="display:none;"></div>
+               <div id="redeemErrorMsg" class="alert alert-danger" style="display:none;"></div>
+               
                <div class="voucher-card">
                   <div>
                      <h6 class="mb-1 fw-bold">Free French Croissant</h6>
                      <small class="text-muted">Requires 150 points</small>
                   </div>
-                  <button class="btn btn-sm btn-warning rounded-pill fw-bold redeem-btn" data-pts="150">Redeem (150 pts)</button>
-               </div>
-               <div class="voucher-card">
-                  <div>
-                     <h6 class="mb-1 fw-bold">Free Medium Signature Latte</h6>
-                     <small class="text-muted">Requires 250 points</small>
-                  </div>
-                  <button class="btn btn-sm btn-warning rounded-pill fw-bold redeem-btn" data-pts="250">Redeem (250 pts)</button>
-               </div>
-               <div class="voucher-card">
-                  <div>
                      <h6 class="mb-1 fw-bold">$5.00 Off Any Order</h6>
                      <small class="text-muted">Requires 300 points</small>
                   </div>
-                  <button class="btn btn-sm btn-warning rounded-pill fw-bold redeem-btn" data-pts="300">Redeem (300 pts)</button>
+                  <button class="btn btn-sm btn-warning rounded-pill fw-bold redeem-btn" onclick="redeemReward(300)">Redeem (300 pts)</button>
                </div>
             </div>
          </div>
@@ -718,5 +661,163 @@
             </div>
          </div>
       </div>
+@auth
+      <script>
+        function getHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            };
+        }
+        
+        // Orders Logic
+        document.querySelector('[data-cm-target="ordersModal"]').addEventListener('click', function() {
+            fetchMyOrders();
+        });
+
+        function fetchMyOrders() {
+            const container = document.getElementById('myOrdersContainer');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div></div>';
+            
+            fetch('/api/v1/orders', { headers: getHeaders() })
+            .then(res => res.json())
+            .then(res => {
+                const orders = res.data || [];
+                if (orders.length === 0) {
+                    container.innerHTML = '<div class="text-center text-muted py-4"><i class="fas fa-box-open fs-1 mb-3"></i><p>No orders yet!</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                orders.forEach(order => {
+                    // Create status steps
+                    const status = order.status; // pending, brewing, out_for_delivery, delivered
+                    
+                    let activeStep = 1;
+                    if (status === 'processing' || status === 'brewing') activeStep = 2;
+                    else if (status === 'out_for_delivery' || status === 'delivery') activeStep = 3;
+                    else if (status === 'delivered') activeStep = 4;
+                    
+                    let html = `
+                        <div class="order-tracker" style="margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="order-badge ${status === 'pending' ? 'brewing' : (status === 'delivered' ? 'delivered' : 'brewing')} me-2">Order #${order.id.slice(-6).toUpperCase()}</span>
+                                    <small class="text-muted">${order.created_at}</small>
+                                </div>
+                                <span class="fw-bold" style="color:var(--primary);">${order.total_price}</span>
+                            </div>
+                            
+                            <!-- LIVE TRACKING UI -->
+                            ${status !== 'cancelled' ? `
+                            <div class="tracker-steps mt-3 mb-3">
+                                <div class="tracker-progress"></div>
+                                <div class="tracker-step ${activeStep >= 1 ? (activeStep > 1 ? 'done' : 'active') : ''}">
+                                    <div class="tracker-icon"><i class="fas fa-check"></i></div>
+                                    <div class="tracker-label">Order Placed</div>
+                                </div>
+                                <div class="tracker-step ${activeStep >= 2 ? (activeStep > 2 ? 'done' : 'active') : ''}">
+                                    <div class="tracker-icon"><i class="fas fa-mug-hot"></i></div>
+                                    <div class="tracker-label">Brewing</div>
+                                </div>
+                                <div class="tracker-step ${activeStep >= 3 ? (activeStep > 3 ? 'done' : 'active') : ''}">
+                                    <div class="tracker-icon"><i class="fas fa-motorcycle"></i></div>
+                                    <div class="tracker-label">On The Way</div>
+                                </div>
+                                <div class="tracker-step ${activeStep >= 4 ? 'done' : ''}">
+                                    <div class="tracker-icon"><i class="fas fa-home"></i></div>
+                                    <div class="tracker-label">Delivered</div>
+                                </div>
+                            </div>
+                            ` : `<div class="alert alert-danger p-2 mb-3 mt-2"><small><i class="fas fa-times-circle"></i> This order was cancelled.</small></div>`}
+
+                            <div class="small mb-3" style="color: var(--dark);">
+                                <strong>Items:</strong> ${order.items ? order.items.map(i => i.quantity + 'x ' + (i.product ? i.product.name : 'Unknown')).join(', ') : 'No items found'}
+                            </div>
+                            <button class="btn btn-sm btn-outline-dark w-100" onclick="reorder('${order.id}', this)">
+                                <i class="fas fa-redo-alt me-1"></i> Reorder Items
+                            </button>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+            })
+            .catch(err => console.error(err));
+        }
+        
+        function reorder(id, btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding to cart...';
+            
+            fetch(`/api/v1/orders/${id}/reorder`, {
+                method: 'POST',
+                headers: getHeaders()
+            })
+            .then(res => res.json())
+            .then(data => {
+                btn.innerHTML = '<i class="fas fa-check text-success"></i> Added!';
+                if (typeof updateGlobalCartCount === 'function') {
+                    // Slight delay then update cart count
+                    setTimeout(updateGlobalCartCount, 500);
+                }
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-redo-alt me-1"></i> Reorder Items';
+                }, 2000);
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.innerHTML = 'Error. Try again';
+            });
+        }
+        
+        // Rewards Logic
+        document.querySelector('[data-cm-target="rewardsModal"]').addEventListener('click', function() {
+            fetchPoints();
+        });
+        
+        function fetchPoints() {
+            fetch('/api/v1/rewards/points', { headers: getHeaders() })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    document.getElementById('rewardPtsDisplay').textContent = data.points;
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
+        function redeemReward(points) {
+            const successMsg = document.getElementById('redeemSuccessMsg');
+            const errorMsg = document.getElementById('redeemErrorMsg');
+            
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            fetch('/api/v1/rewards/redeem', {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify({ points: points })
+            })
+            .then(res => res.json().then(data => ({status: res.status, body: data})))
+            .then(res => {
+                if (res.status === 200 && res.body.status === 'success') {
+                    successMsg.textContent = res.body.message;
+                    successMsg.style.display = 'block';
+                    document.getElementById('rewardPtsDisplay').textContent = res.body.points;
+                } else {
+                    errorMsg.textContent = res.body.message || 'Error redeeming reward.';
+                    errorMsg.style.display = 'block';
+                }
+            })
+            .catch(err => {
+                errorMsg.textContent = 'Network error.';
+                errorMsg.style.display = 'block';
+            });
+        }
+      </script>
+@endauth
    </body>
 </html>
