@@ -23,12 +23,11 @@ class StoreSavedCardRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'card_token' => 'required|string',
-            'last_four' => 'required|string|size:4',
-            'brand' => 'required|string',
-            'exp_month' => 'required|integer|min:1|max:12',
-            'exp_year' => 'required|integer',
-            'is_default' => 'boolean',
+            'card_type' => 'required|string',
+            'card_name' => 'required|string',
+            'card_number' => 'required|string',
+            'expiry_date' => 'required|string',
+            'cvv' => 'required|string',
         ];
     }
 }
