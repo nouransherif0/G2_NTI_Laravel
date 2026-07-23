@@ -790,27 +790,27 @@
                     <div class="fcard">
                         <div class="row g-3">
                             <div class="col-sm-6"><label class="flbl">Full Name *</label><input type="text"
-                                    class="fctrl" placeholder=" john" /></div>
+                                    id="resFullName" class="fctrl" placeholder=" john" /></div>
                             <div class="col-sm-6"><label class="flbl">Phone Number *</label><input type="tel"
-                                    class="fctrl" placeholder="+20 1 000-0000" /></div>
+                                    id="resPhone" class="fctrl" placeholder="+20 1 000-0000" /></div>
                             <div class="col-sm-6"><label class="flbl">Email Address *</label><input type="email"
-                                    class="fctrl" placeholder="xxxx@gmail.com" /></div>
+                                    id="resEmail" class="fctrl" placeholder="xxxx@gmail.com" /></div>
                             <div class="col-sm-6">
                                 <label class="flbl">Number of Guests *</label>
-                                <select class="fctrl">
-                                    <option>1 Person</option>
-                                    <option>2 People</option>
-                                    <option>3 - 4 People</option>
-                                    <option>5 - 6 People</option>
-                                    <option>7 -10 People</option>
-                                    <option>10+ People</option>
+                                <select class="fctrl" id="resGuests">
+                                    <option value="1">1 Person</option>
+                                    <option value="2">2 People</option>
+                                    <option value="4">3 - 4 People</option>
+                                    <option value="6">5 - 6 People</option>
+                                    <option value="10">7 -10 People</option>
+                                    <option value="15">10+ People</option>
                                 </select>
                             </div>
                             <div class="col-sm-6"><label class="flbl">Date *</label><input type="date"
-                                    class="fctrl" /></div>
+                                    id="resDate" class="fctrl" /></div>
                             <div class="col-sm-6">
                                 <label class="flbl">Time *</label>
-                                <select class="fctrl">
+                                <select class="fctrl" id="resTime">
                                     <option>09:00 AM</option>
                                     <option>10:00 AM</option>
                                     <option>11:00 AM</option>
@@ -825,7 +825,7 @@
                                 </select>
                             </div>
                             <div class="col-12"><label class="flbl">Special Requests</label>
-                                <textarea class="fctrl" rows="3" placeholder="Allergies, dietary needs, special occasions..."></textarea>
+                                <textarea id="resSpecialRequests" class="fctrl" rows="3" placeholder="Allergies, dietary needs, special occasions..."></textarea>
                             </div>
                             <div class="col-12"><button class="btn-red w-100 justify-content-center" id="resBtn"><i
                                         class="fas fa-calendar-check"></i>Confirm Reservation</button></div>
@@ -966,14 +966,14 @@
                     <div class="fcard">
                         <div class="row g-3">
                             <div class="col-sm-6"><label class="flbl">Your Name *</label><input type="text"
-                                    class="fctrl" placeholder="John " /></div>
+                                    id="ctcName" class="fctrl" placeholder="John " /></div>
                             <div class="col-sm-6"><label class="flbl">Email Address *</label><input type="email"
-                                    class="fctrl" placeholder="xxxx@gmail.com" /></div>
+                                    id="ctcEmail" class="fctrl" placeholder="xxxx@gmail.com" /></div>
                             <div class="col-sm-6"><label class="flbl">Phone Number</label><input type="tel"
-                                    class="fctrl" placeholder="+20 1 000-0000" /></div>
+                                    id="ctcPhone" class="fctrl" placeholder="+20 1 000-0000" /></div>
                             <div class="col-sm-6">
                                 <label class="flbl">Subject *</label>
-                                <select class="fctrl">
+                                <select class="fctrl" id="ctcSubject">
                                     <option>General Inquiry</option>
                                     <option>Catering &amp; Events</option>
                                     <option>Feedback</option>
@@ -982,7 +982,7 @@
                                 </select>
                             </div>
                             <div class="col-12"><label class="flbl">Message *</label>
-                                <textarea class="fctrl" rows="5" placeholder="Write your message here..."></textarea>
+                                <textarea class="fctrl" id="ctcMessage" rows="5" placeholder="Write your message here..."></textarea>
                             </div>
                             <div class="col-12"><button class="btn-red" id="ctcBtn"><i
                                         class="fas fa-paper-plane"></i>Send Message</button></div>

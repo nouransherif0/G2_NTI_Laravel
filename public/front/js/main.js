@@ -434,35 +434,126 @@ document.getElementById('mpAddCart').addEventListener('click', function() {
 
 document.getElementById('resBtn').addEventListener('click', function() {
     var btn = this;
+    var fullName = document.getElementById('resFullName').value;
+    var phone = document.getElementById('resPhone').value;
+    var email = document.getElementById('resEmail').value;
+    var guests = document.getElementById('resGuests').value;
+    var date = document.getElementById('resDate').value;
+    var time = document.getElementById('resTime').value;
+    var special = document.getElementById('resSpecialRequests').value;
+
+    if (!fullName || !phone || !email || !date || !time) {
+        alert('Please fill out all required fields.');
+        return;
+    }
+
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Booking...';
     btn.disabled = true;
-    setTimeout(function() {
+
+    fetch('/reservation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            full_name: fullName,
+            phone_number: phone,
+            email_address: email,
+            guests: parseInt(guests),
+            reservation_date: date,
+            reservation_time: time,
+            special_requests: special
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
         btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Reservation';
         btn.disabled = false;
-        var ok = document.getElementById('resOk');
-        ok.style.display = 'block';
-        ok.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest'
-        });
-    }, 1500);
+        
+        if (data.success) {
+            var ok = document.getElementById('resOk');
+            ok.style.display = 'block';
+            ok.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+            // Clear inputs
+            document.getElementById('resFullName').value = '';
+            document.getElementById('resPhone').value = '';
+            document.getElementById('resEmail').value = '';
+            document.getElementById('resDate').value = '';
+            document.getElementById('resSpecialRequests').value = '';
+        } else {
+            alert(data.message || 'Error making reservation');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        btn.innerHTML = '<i class="fas fa-calendar-check"></i> Confirm Reservation';
+        btn.disabled = false;
+        alert('An error occurred. Please try again.');
+    });
 });
 
 
 document.getElementById('ctcBtn').addEventListener('click', function() {
     var btn = this;
+    var name = document.getElementById('ctcName').value;
+    var email = document.getElementById('ctcEmail').value;
+    var phone = document.getElementById('ctcPhone').value;
+    var subject = document.getElementById('ctcSubject').value;
+    var message = document.getElementById('ctcMessage').value;
+
+    if (!name || !email || !subject || !message) {
+        alert('Please fill out all required fields.');
+        return;
+    }
+
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     btn.disabled = true;
-    setTimeout(function() {
+
+    fetch('/contact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            subject: subject,
+            message: message
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
         btn.disabled = false;
-        var ok = document.getElementById('ctcOk');
-        ok.style.display = 'block';
-        ok.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest'
-        });
-    }, 1500);
+        
+        if (data.success) {
+            var ok = document.getElementById('ctcOk');
+            ok.style.display = 'block';
+            ok.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+            // Clear inputs
+            document.getElementById('ctcName').value = '';
+            document.getElementById('ctcEmail').value = '';
+            document.getElementById('ctcPhone').value = '';
+            document.getElementById('ctcMessage').value = '';
+        } else {
+            alert(data.message || 'Error sending message');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        btn.disabled = false;
+        alert('An error occurred. Please try again.');
+    });
 });
 
 
@@ -570,15 +661,45 @@ document.getElementById('nlBtn').addEventListener('click', function() {
     var email = document.getElementById('nlEmail').value;
     if (email && email.includes('@')) {
         var btn = this;
-        btn.textContent = 'âœ“ Subscribed!';
-        btn.style.background = '#4ade80';
-        btn.style.color = '#222';
-        document.getElementById('nlEmail').value = '';
-        setTimeout(function() {
-            btn.textContent = 'Subscribe';
-            btn.style.background = '';
-            btn.style.color = '';
-        }, 3000);
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
+
+        fetch('/subscribe', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                btn.textContent = '✓ Subscribed!';
+                btn.style.background = '#4ade80';
+                btn.style.color = '#222';
+                document.getElementById('nlEmail').value = '';
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                    btn.disabled = false;
+                }, 3000);
+            } else {
+                alert(data.message || 'Already subscribed!');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+    } else {
+        alert('Please enter a valid email address.');
     }
 });
 

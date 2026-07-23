@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\Auth\AuthController;
 use App\Http\Controllers\Web\Auth\PasswordResetController;
 use App\Http\Controllers\Web\Favorites\FavoriteController;
 use App\Http\Controllers\Web\Admin\AdminDashboardController;
+use App\Http\Controllers\Web\Forms\FormController;
 
 // API Customer Controllers (used in web routes)
 use App\Http\Controllers\Api\V1\Products\ProductController;
@@ -36,6 +37,10 @@ use App\Http\Controllers\Api\V1\Admin\DeliveryZoneController as AdminDeliveryZon
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::post('/contact', [FormController::class, 'submitContact'])->name('contact.submit');
+Route::post('/subscribe', [FormController::class, 'subscribe'])->name('subscribe.submit');
+Route::post('/reservation', [FormController::class, 'makeReservation'])->name('reservation.submit');
 
 /*
 |--------------------------------------------------------------------------
