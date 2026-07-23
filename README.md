@@ -132,9 +132,32 @@ http://127.0.0.1:8000/api/documentation
 
 ## 🛠️ Installation & Setup Guide
 
-Follow these steps to run the application locally:
+### 🐳 Quick Start with Docker (Recommended)
+
+Run the entire stack (Laravel, PHP 8.3, Nginx, MySQL 8.0, Swagger) with a single command:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/nouransherif0/G2_NTI_Laravel.git
+cd G2_NTI_Laravel
+
+# 2. Build and start containers
+docker compose up -d --build
+```
+
+The application automatically handles database waiting, environment configuration, migrations, database seeding, storage linking, and Swagger API generation.
+
+- **Web Application:** `http://127.0.0.1:8000`
+- **Swagger API Docs:** `http://127.0.0.1:8000/api/documentation`
+
+---
+
+### 💻 Manual Local Setup
+
+If you prefer to run PHP and MySQL directly on your host machine:
 
 ### 1. Prerequisites
+
 * PHP >= 8.3
 * Composer
 * MySQL Database Server
