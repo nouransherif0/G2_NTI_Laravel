@@ -1432,7 +1432,7 @@
                 ],
                 "summary": "Login user",
                 "description": "Authenticate a user and create a session.",
-                "operationId": "42f77e072dec84b0e1094cca1228298e",
+                "operationId": "7726021045b106cfedcd600b026bf0ff",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1460,178 +1460,11 @@
                     }
                 },
                 "responses": {
-                    "204": {
-                        "description": "Successfully authenticated (or 302 Redirect)"
+                    "200": {
+                        "description": "Successfully authenticated (JSON) or 302 Redirect (Web)"
                     },
                     "422": {
                         "description": "Validation error / Invalid credentials"
-                    }
-                }
-            }
-        },
-        "/logout": {
-            "post": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Logout user",
-                "description": "Destroy the authenticated session.",
-                "operationId": "03afb12b342c2ea43bdc1de4f39e91a8",
-                "responses": {
-                    "204": {
-                        "description": "Successfully logged out (or 302 Redirect)"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/reset-password": {
-            "post": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Reset password",
-                "description": "Reset the user password using a token.",
-                "operationId": "24b1c68468bf984b8806908f211f3827",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "token",
-                                    "email",
-                                    "password",
-                                    "password_confirmation"
-                                ],
-                                "properties": {
-                                    "token": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "user@example.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Password has been successfully reset (or 302 Redirect)"
-                    },
-                    "422": {
-                        "description": "Validation error / Invalid token"
-                    }
-                }
-            }
-        },
-        "/password": {
-            "put": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Update password",
-                "description": "Update the authenticated user password.",
-                "operationId": "88ac00024cf86da3e4fc35d036a874d5",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "current_password",
-                                    "password",
-                                    "password_confirmation"
-                                ],
-                                "properties": {
-                                    "current_password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "oldpassword123"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "newpassword123"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Password successfully updated (or 302 Redirect)"
-                    },
-                    "422": {
-                        "description": "Validation error / Incorrect current password"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/forgot-password": {
-            "post": {
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Request password reset link",
-                "description": "Send a password reset link to the given email address.",
-                "operationId": "888e4aa5b202b170b9fe831da90048c6",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "email"
-                                ],
-                                "properties": {
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "user@example.com"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Reset link sent successfully (or 302 Redirect)"
-                    },
-                    "422": {
-                        "description": "Validation error / Email not found"
                     }
                 }
             }
@@ -1643,7 +1476,7 @@
                 ],
                 "summary": "Register a new user",
                 "description": "Create a new user account and authenticate them.",
-                "operationId": "573de1fed352c1205a32c4d1b9877375",
+                "operationId": "d602acbf16c4ed9b6f8969010de2ffd9",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1682,11 +1515,178 @@
                     }
                 },
                 "responses": {
-                    "204": {
-                        "description": "Successfully registered (or 302 Redirect)"
+                    "201": {
+                        "description": "Successfully registered (JSON) or 302 Redirect (Web)"
                     },
                     "422": {
                         "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout user",
+                "description": "Destroy the authenticated session.",
+                "operationId": "2f21becf7f85cc67be837d8bebb22023",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out (JSON) or 302 Redirect (Web)"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/password": {
+            "put": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Update password",
+                "description": "Update the authenticated user password.",
+                "operationId": "24d6485cf8fa1a983c1bd0041e41ae4d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "current_password",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "current_password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "oldpassword123"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password successfully updated (JSON) or 302 Redirect (Web)"
+                    },
+                    "422": {
+                        "description": "Validation error / Incorrect current password"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/forgot-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Request password reset link",
+                "description": "Send a password reset link to the given email address.",
+                "operationId": "67a8d4f1622c4b4bff19c0867b4adf9b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reset link sent successfully (JSON) or 302 Redirect (Web)"
+                    },
+                    "422": {
+                        "description": "Validation error / Email not found"
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset password",
+                "description": "Reset the user password using a token.",
+                "operationId": "7b4be13f5401b869dc823107a1e04919",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password has been successfully reset (JSON) or 302 Redirect (Web)"
+                    },
+                    "422": {
+                        "description": "Validation error / Invalid token"
                     }
                 }
             }

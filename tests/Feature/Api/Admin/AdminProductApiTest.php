@@ -21,7 +21,7 @@ class AdminProductApiTest extends TestCase
         $subcategory = Subcategory::factory()->create();
 
         Storage::fake('public');
-        $file = \Illuminate\Http\UploadedFile::fake()->image('product.jpg');
+        $file = \Illuminate\Http\UploadedFile::fake()->create('product.jpg', 100, 'image/jpeg');
 
         $response = $this->actingAs($user)->postJson('/admin/products', [
             'subcategory_id' => $subcategory->id,

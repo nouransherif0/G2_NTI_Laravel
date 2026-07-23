@@ -27,7 +27,7 @@ class AdminCategoryApiTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'admin']);
         Storage::fake('public');
-        $file = \Illuminate\Http\UploadedFile::fake()->image('category.jpg');
+        $file = \Illuminate\Http\UploadedFile::fake()->create('category.jpg', 100, 'image/jpeg');
 
         $response = $this->actingAs($user)->postJson('/admin/categories', [
             'name' => 'New Category',

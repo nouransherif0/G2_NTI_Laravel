@@ -33,6 +33,8 @@ An end-to-end e-commerce system and RESTful API backend for **Sip & Snug Cafe**.
 * **Laravel Sanctum**: API token management and stateful session authentication.
 * **MySQL 8.0**: Relational database storage with Eloquent ORM relationships.
 * **L5-Swagger (OpenAPI 3.0)**: Interactive API documentation and specification generator.
+* **Clean Architecture**: Domain-driven folder structures for Controllers (`Web`, `Api`, `Admin`, `Auth`, etc.).
+* **FormRequest Validation**: Strict, dedicated validation classes separating business logic from controllers.
 
 ### **Frontend & UI**
 * **Blade Templating Engine**: Server-rendered layouts for customer storefront and admin panel.
@@ -161,7 +163,6 @@ If you prefer to run PHP and MySQL directly on your host machine:
 * PHP >= 8.3
 * Composer
 * MySQL Database Server
-* Node.js & NPM (optional for assets)
 
 ### 2. Step-by-Step Setup
 
@@ -209,11 +210,12 @@ Access Swagger API Docs at `http://127.0.0.1:8000/api/documentation`
 The application includes unit and feature test suites powered by PHPUnit to verify API endpoints, authentication, cart functionality, and order processing:
 
 ```bash
-# Run all test suites
+# Run all test suites (72+ robust tests covering Web and API routes)
 php artisan test
 
-# Run cart API feature tests specifically
-php artisan test --filter=CartApiTest
+# Run specific feature tests
+php artisan test --filter=CustomerRoutesTest
+php artisan test --filter=AdminRoutesTest
 ```
 
 ---

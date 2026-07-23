@@ -44,7 +44,7 @@
                                         Remember Me
                                     </label>
                                 </div>
-                                <a href="#" style="color: var(--secondary); font-size: 0.9rem; text-decoration: none;">Forgot Password?</a>
+                                <a href="{{ route('password.request') }}" style="color: var(--secondary); font-size: 0.9rem; text-decoration: none;">Forgot Password?</a>
                             </div>
 
                             <div class="col-12 mt-4">

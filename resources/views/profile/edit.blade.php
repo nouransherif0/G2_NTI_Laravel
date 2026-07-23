@@ -26,9 +26,7 @@
                     <h4 class="mb-3" style="color: var(--primary); font-family: 'Playfair Display', serif;">Profile Information</h4>
                     <p class="text-muted small mb-4">Update your account's profile information and email address.</p>
                     
-                    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-                        @csrf
-                    </form>
+
 
                     <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @csrf
@@ -60,15 +58,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             
-                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                                <div class="mt-2 text-warning small">
-                                    Your email address is unverified.
-                                    <button form="send-verification" class="btn btn-link p-0 m-0 align-baseline text-decoration-none">Click here to re-send the verification email.</button>
-                                </div>
-                                @if (session('status') === 'verification-link-sent')
-                                    <div class="text-success small mt-1">A new verification link has been sent to your email address.</div>
-                                @endif
-                            @endif
+
                         </div>
 
                         <button type="submit" class="btn btn-dark" style="background-color: var(--primary); border: none; border-radius: 25px; padding: 10px 30px; font-weight: 500;">Save Changes</button>

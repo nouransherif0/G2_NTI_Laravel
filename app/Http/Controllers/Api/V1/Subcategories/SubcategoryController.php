@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Subcategories\SubcategoryResource;
 use App\Services\Subcategories\SubcategoryService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Customer\FilterSubcategoriesRequest;
 use OpenApi\Attributes as OA;
 
 class SubcategoryController extends Controller
@@ -31,11 +32,8 @@ class SubcategoryController extends Controller
             new OA\Response(response: 422, description: 'Validation error')
         ]
     )]
-    public function index(Request $request)
+    public function index(FilterSubcategoriesRequest $request)
     {
-        $request->validate([
-            'category_id' => 'required|integer|exists:categories,id',
-        ]);
         
         $subcategories = $this->subcategoryService->getSubcategoriesByCategory($request->category_id);
         return SubcategoryResource::collection($subcategories);

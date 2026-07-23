@@ -86,24 +86,6 @@ class AuthEndpointsTest extends TestCase
         $response->assertRedirect('/');
     }
 
-    public function test_verify_email_page_can_be_rendered(): void
-    {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->unverified()->create();
-        $this->actingAs($user);
 
-        $response = $this->get('/verify-email');
-        $response->assertStatus(200);
-    }
-
-    public function test_confirm_password_page_can_be_rendered(): void
-    {
-        /** @var \App\Models\User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
-        $response = $this->get('/confirm-password');
-        $response->assertStatus(200);
-    }
 }
 

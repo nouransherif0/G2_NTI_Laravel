@@ -3,9 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Orders\OrderController;
-use App\Http\Controllers\Api\V1\SavedCardController;
-use App\Http\Controllers\Api\V1\ChatController;
-use App\Http\Controllers\Api\V1\RewardController;
+use App\Http\Controllers\Api\V1\SavedCards\SavedCardController;
+use App\Http\Controllers\Api\V1\Chats\ChatController;
+use App\Http\Controllers\Api\V1\Rewards\RewardController;
 use App\Http\Controllers\Api\V1\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\V1\Carts\CartController;
 use App\Http\Controllers\Api\V1\Addresses\AddressController;
